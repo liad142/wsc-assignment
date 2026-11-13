@@ -14,7 +14,7 @@ A pipeline that turns conference attendees into a lasting talent pool, works out
 | Schema and flow; definition of the output | [`docs/FLOW_AND_SCHEMA.md`](docs/FLOW_AND_SCHEMA.md): diagrams, each step (in, what happens, out, why), data model, every output column |
 | Stated assumptions | [`docs/ASSUMPTIONS.md`](docs/ASSUMPTIONS.md); summary [below](#assumptions-in-brief) |
 | Executive summary (optional) | Next section |
-| HTML or CLI summary view (bonus) | `app.html`, and the table `run.js` prints |
+| HTML or CLI summary view (bonus) | `app.html` ([open it live](https://liad142.github.io/wsc-assignment/app.html)), and the table `run.js` prints |
 | Missing profiles, no connections, partial matches | [Missing and partial data](docs/FLOW_AND_SCHEMA.md#5-missing-and-partial-data), each case with a test |
 
 ## Executive summary (for a non-technical reader)
@@ -33,7 +33,7 @@ node run.js --job JOB001        # demo job: Senior ML Engineer
 
 This prints the shortlist, the three contacts just below the line, and writes `output/JOB001_shortlist.csv`. Other jobs: `JOB002`, `JOB003`, `JOB004`. Add `--all` to export every contact, including those below the shortlist line.
 
-**Recruiter view (no spreadsheet needed):** open `app.html` in a browser by double-clicking it. It needs no server and no Node. It runs the same engine as the command line.
+**Recruiter view (no spreadsheet needed):** open it live at **<https://liad142.github.io/wsc-assignment/app.html>**, or double-click `app.html` after downloading the repository. It needs no server and no Node, and runs the same engine as the command line. The data is the simulated sample; nothing leaves the page.
 
 ```bash
 node tests/run-tests.js         # 28 engine tests, including every missing-data path

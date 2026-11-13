@@ -1,7 +1,7 @@
 # Flow, schema and output
 
 What the pipeline does at each step, what it stores, what it returns, and what happens when data is missing.
-Contents: [flow](#1-flow), [step by step](#2-step-by-step), [data model](#3-data-model), [the output](#4-the-output), [missing and partial data](#5-missing-and-partial-data). The diagrams are also in `flow.html` as one page.
+Contents: [flow](#1-flow), [step by step](#2-step-by-step), [data model](#3-data-model), [the output](#4-the-output), [missing and partial data](#5-missing-and-partial-data). The diagrams are also [one page](https://liad142.github.io/wsc-assignment/docs/flow.html) (`flow.html`).
 
 ## 1. Flow
 
