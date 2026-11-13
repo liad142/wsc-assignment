@@ -5,7 +5,7 @@
       "Python": {"full": ["Python"], "partial": ["Python basics"], "exclude": []},
       "PyTorch": {"full": ["PyTorch"], "partial": ["TensorFlow", "Deep Learning"], "exclude": []},
       "Computer Vision": {"full": ["Computer Vision", "Sports CV"], "partial": ["OpenCV", "YOLO", "Pose Estimation", "Video Understanding", "Highlight Detection", "Video Analytics", "Video Captioning"], "exclude": ["Video Encoding", "FFmpeg"], "text_full": {"title": ["computer vision"]}},
-      "Object Detection": {"full": ["YOLO"], "partial": ["Sports Tracking", "Pose Estimation"], "exclude": ["Event Detection"], "text_partial": {"notes": ["tracking"]}},
+      "Object Detection": {"full": ["YOLO"], "partial": ["Sports Tracking", "Pose Estimation"], "exclude": ["Event Detection"]},
       "AWS": {"full": ["AWS"], "partial": ["SageMaker", "GCP", "Azure"], "exclude": []}
     },
     "domains": {

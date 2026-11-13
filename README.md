@@ -4,6 +4,19 @@ Take-home submission for the AI Solution Manager recruitment task.
 
 A pipeline that turns conference attendees into a lasting talent pool, works out what each person actually does, and, when a role opens, shows the recruiter who to contact, why, what still needs checking, and which WSC employee might know them.
 
+## What is in this submission
+
+| The brief asks for | Where it is |
+|---|---|
+| Working pipeline, runnable on the provided CSVs with a `job_id` | `run.js`, `src/`; setup and run instructions below |
+| Output CSV for JOB001 | [`output/JOB001_shortlist.csv`](output/JOB001_shortlist.csv) (the other three jobs are there too) |
+| Design document, 1-2 pages | [`docs/DESIGN.md`](docs/DESIGN.md): why this approach, production integrations, scale, more time |
+| Schema and flow; definition of the output | [`docs/FLOW_AND_SCHEMA.md`](docs/FLOW_AND_SCHEMA.md): diagrams, each step (in, what happens, out, why), data model, every output column |
+| Stated assumptions | [`docs/ASSUMPTIONS.md`](docs/ASSUMPTIONS.md); summary [below](#assumptions-in-brief) |
+| Executive summary (optional) | Next section |
+| HTML or CLI summary view (bonus) | `app.html`, and the table `run.js` prints |
+| Missing profiles, no connections, partial matches | [Missing and partial data](docs/FLOW_AND_SCHEMA.md#5-missing-and-partial-data), each case with a test |
+
 ## Executive summary (for a non-technical reader)
 
 Our recruiters meet strong candidates at conferences, and within days most of those contacts are lost: they live on business cards and in phone notes. Even when a list survives, someone has to read through every attendee to find the few who fit, because a DevOps conference is also full of IT managers and vendor sales reps.
@@ -18,13 +31,14 @@ Requirements: [Node.js](https://nodejs.org) 18 or later. No packages to install,
 node run.js --job JOB001        # demo job: Senior ML Engineer
 ```
 
-This prints the shortlist and writes `output/JOB001_shortlist.csv`. Other jobs: `JOB002`, `JOB003`, `JOB004`. Add `--all` to export every contact, including those below the shortlist line.
+This prints the shortlist, the three contacts just below the line, and writes `output/JOB001_shortlist.csv`. Other jobs: `JOB002`, `JOB003`, `JOB004`. Add `--all` to export every contact, including those below the shortlist line.
 
 **Recruiter view (no spreadsheet needed):** open `app.html` in a browser by double-clicking it. It needs no server and no Node. It runs the same engine as the command line.
 
 ```bash
-node tests/run-tests.js         # 21 engine tests, including every missing-data path
+node tests/run-tests.js         # 28 engine tests, including every missing-data path
 node tools/sensitivity.js       # shows how little the ranking depends on the exact weights
+node tools/benchmark.js         # matching time as the pool grows to 100,000 contacts
 node tests/ui-smoke.js          # optional: 10 browser tests, needs Chrome and Node 22
 node app/build.js               # rebuild app.html after changing code, config or data
 ```
@@ -33,7 +47,7 @@ node app/build.js               # rebuild app.html after changing code, config o
 
 1. **`app.html`, Shortlist, Senior ML Engineer (JOB001).** Three people share the top band. "Object Detection" is a required skill that appears in none of the 75 profiles; open **Priya Anand** to see it matched through YOLO, and **Marcus Reid** to see "Event Detection" correctly *not* counted.
 2. **Connections.** Lucas Evans has three WSC connections, all LinkedIn-only. Priya has two, and one of them worked at Mobileye in the same years. The count is not what matters.
-3. **Switch the role to Data Engineer (JOB004).** A different list, different evidence. Then the Product role (JOB003): only two people pass, and the tool says so rather than padding the list.
+3. **Switch the role to Data Engineer (JOB004).** A different list, different evidence: Yuki Tanaka is in the top band here and not on the ML list at all. Then the Product role (JOB003): only two people pass, and the tool says so rather than padding the list.
 4. **Move a weight slider.** The order shifts slightly; the people on the shortlist do not change.
 5. **Talent pool.** Filter "Outside for the conference" to see the noise the brief describes, kept but out of the way. Then import `data/samples/new_conference_export.csv` to see a returning contact gain a second encounter, two contacts kept without a LinkedIn profile, one row sent to the correction queue and one to identity review.
 
@@ -47,7 +61,19 @@ node app/build.js               # rebuild app.html after changing code, config o
 | 4. Connections | Matches, `wsc_employees.csv` | Resolve connection IDs to current employees and grade them by shared work history. | Suggested next step per contact |
 | Output | | One row per contact and job. | HubSpot-ready CSV and the recruiter view |
 
-Full detail: [docs/DESIGN.md](docs/DESIGN.md) (design, production integrations, scale), [docs/ASSUMPTIONS.md](docs/ASSUMPTIONS.md) (all stated assumptions, including the seven questions in the brief) and `docs/flow.html` (the full flow as a diagram; open it in a browser).
+Each step in full, with why it exists and what replaces the CSV in production: [docs/FLOW_AND_SCHEMA.md](docs/FLOW_AND_SCHEMA.md).
+
+## Assumptions in brief
+
+The reasoning behind each one is in [docs/ASSUMPTIONS.md](docs/ASSUMPTIONS.md).
+
+1. **Domain relevance** is judged from what a person does (title, skills, industry), then compared with the conference domain: in domain, adjacent, outside or unknown. It is a label, never a gate; nobody is deleted.
+2. **No LinkedIn profile:** the contact is kept, the reason is stored, and they are classified from the badge details. Their match is marked preliminary.
+3. **One connection or three:** the count does not matter, the strength does. Connections are graded by shared work history and add no points to the score.
+4. **Already in Comeet:** flag, do not filter. ATS status changes the recruiter's action, not the score.
+5. **Refresh cadence:** capture after every conference, matching whenever a role opens or changes, re-enrichment only for stale profiles.
+6. **Trigger:** automatic by default (badge export, QR form, a role opened in Comeet), manual always available.
+7. **Privacy:** recruiting purpose only, recorded consent, minimal data, a retention period, one place for access and deletion requests. To be confirmed with legal counsel.
 
 ## Scoring in one paragraph
 
@@ -55,7 +81,7 @@ Score = 60 × required-skill coverage + 25 × key-domain coverage + 5 × role fa
 
 ## Output file
 
-`output/JOB001_shortlist.csv`, one row per shortlisted contact:
+`output/JOB001_shortlist.csv`, one row per shortlisted contact. Every column is described in [docs/FLOW_AND_SCHEMA.md](docs/FLOW_AND_SCHEMA.md#4-the-output), with the HubSpot field it maps to.
 
 | Group | Columns |
 |---|---|
@@ -78,10 +104,10 @@ src/                    the engine, one file per stage, no dependencies
 config/taxonomy.json    term table: equivalent, related and misleading terms per requirement
 config/scoring.json     weights, thresholds, seniority and role-family rules, domain definitions
 data/                   the four provided CSV files, unchanged; samples/ holds one extra import for the demo
-output/                 JOB001_shortlist.csv
+output/                 the shortlist for each of the four jobs; JOB001 is the required one
 tests/                  engine tests and an optional browser test
-tools/sensitivity.js    weight sensitivity check
-docs/                   DESIGN.md, ASSUMPTIONS.md, flow.html (the flow as a diagram)
+tools/                  sensitivity.js (do the weights matter?), benchmark.js (how fast at scale?)
+docs/                   DESIGN.md, FLOW_AND_SCHEMA.md, ASSUMPTIONS.md, flow.html and img/ (the flow diagrams)
 ```
 
 To extend it: a new job needs a block in `taxonomy.json` and a line in `role_family`; a new conference needs a line in `conference_relevance`; a new scoring rule is a function in `src/match.js` with a test beside it.

@@ -172,7 +172,7 @@ textarea.csv{width:100%;height:150px;margin-top:10px;font-family:ui-monospace,Me
 @media (max-width:520px){.row{grid-template-columns:50px minmax(0,1fr)}.row .right{grid-column:2}.strip{grid-column:1 / -1;flex-wrap:wrap}.seg{flex:1 1 30%}.kv{grid-template-columns:1fr}.wgrid{grid-template-columns:104px 1fr 40px}}
 @media (prefers-reduced-motion: reduce){*{transition:none!important}}
 
-/* ---------- doodle layer ---------- */
+/* ---------- theme: ink outlines, offset shadows, paper background ---------- */
 body{color:var(--text);background-color:var(--canvas);background-image:radial-gradient(var(--dot) 1.2px,transparent 1.3px);background-size:22px 22px}
 h1,h2,h3,.brand,.score,.detail .big,.steps .n,.btn,.rolebtn b,nav.tabs button,details.weights summary{font-family:var(--display);font-weight:400;letter-spacing:0;color:var(--ink)}
 .brand{font-size:26px} .jobcard h1,.pagehead h1{font-size:clamp(34px,3.6vw,50px);line-height:1.05}
@@ -229,7 +229,7 @@ textarea.csv{border:2.5px solid var(--ink);border-radius:var(--r2)}
 .detail .big small{white-space:nowrap}
 .rolebtn b{font-size:16px} .brand small{font-family:var(--body)}
 
-/* ---------- calmer pass: one plain typeface, one accent ---------- */
+/* ---------- typography and accent: one plain typeface, one accent colour ---------- */
 h1,h2,h3,.brand,.score,.detail .big,.steps .n,.btn,.rolebtn b,nav.tabs button,details.weights summary,.next b,.conn .av,.rolebtn i,.toast{font-family:var(--body)}
 h1,h2,h3,.brand,.detail .big,.steps .n{font-weight:700;letter-spacing:-.02em}
 .score{font-weight:700;letter-spacing:-.02em;font-size:21px}
@@ -241,7 +241,7 @@ h1,h2,h3,.brand,.detail .big,.steps .n{font-weight:700;letter-spacing:-.02em}
 .steps .n{color:var(--ink);-webkit-text-stroke:0}
 :focus-visible{outline-color:var(--ink)}
 
-/* ---------- softer pass: thinner ink, shorter shadows, nothing tilted ---------- */
+/* ---------- line weights and shadows ---------- */
 :root{--r1:13px 15px 12px 14px / 14px 12px 15px 13px; --r2:9px 11px 9px 10px / 10px 9px 11px 9px; --r3:19px 21px 18px 20px / 20px 18px 21px 19px}
 body{background-image:radial-gradient(var(--dot) 1px,transparent 1.1px);background-size:24px 24px}
 .rail{border-inline-end-width:1.5px}

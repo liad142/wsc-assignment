@@ -18,7 +18,7 @@ Numbers marked *(starting value)* are our own choices, kept in `config/scoring.j
 
 ### 3. Is one mutual connection treated the same as three?
 **Assumption.** The count does not matter; the strength does. Each connection is graded: *worked together* (same employer, overlapping years), *same employer* (overlap not confirmed), or *LinkedIn only*. Connections add **zero** points to the match score.
-**Why.** A LinkedIn connection is not proof that two people know each other. In the data only about 13 of 79 connection pairs are backed by overlapping work history. Giving points for connections would rank well-networked people above better-qualified ones.
+**Why.** A LinkedIn connection is not proof that two people know each other. In the data only 13 of 79 connection pairs are backed by overlapping work history. Giving points for connections would rank well-networked people above better-qualified ones.
 **Consequence.** Connections change the recruiter's *next step* (who to ask for an introduction), not the candidate's rank.
 
 ### 4. Should candidates already in the ATS (Comeet) be flagged differently?
@@ -57,6 +57,7 @@ Numbers marked *(starting value)* are our own choices, kept in `config/scoring.j
 ## C. Scoring logic
 
 - **Term table.** Job wording and profile wording differ: "Object Detection" is a required skill for JOB001 and appears literally in none of the 75 profiles. `config/taxonomy.json` lists, per requirement, *equivalent* terms (full credit), *related* terms (half credit) and *misleading* terms (no credit). It is a first version, written by us, to be reviewed by the hiring manager.
+- **Free text is weak evidence.** A recruiter's note counts only for a specific phrase ("highlight" for Sports Video Analysis). A generic word does not: "working on player tracking" in a note about a data engineer is not evidence of Object Detection, and counting it put a data engineer on the ML shortlist in an early version. A test now guards this.
 - **Weights** *(starting values)*: required skills 60, key domains 25, role family 5, seniority 5, nice-to-have 5. Inside a group every requirement weighs the same, because the job file gives no relative importance.
 - **Why these weights.** Required skills weigh most because WSC labelled them "required". The exact numbers matter little: six alternative schemes, from equal weights to 80% on required skills, keep at least 7 of the top 10 for every job, and usually 9 or 10 (`node tools/sensitivity.js`). We cannot claim one scheme is *more accurate*; that needs hiring outcomes, which the data does not contain.
 - **Bands, not ranks.** Scores closer than 3 points *(starting value)* are shown as one priority band. Inside a band, order is by required-skill coverage, then by how well the evidence is backed.
