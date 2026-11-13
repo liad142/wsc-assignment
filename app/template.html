@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TalentOps Conference Talent Pool</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..700&display=swap">
+<style>/*CSS*/</style>
+</head>
+<body>
+<div class="shell">
+<aside class="rail">
+  <div class="brand">TalentOps<small>People we met, ready when a role opens</small></div>
+  <div class="roles"><h2>Open roles</h2><div id="roles"></div></div>
+  <div class="jobpick"><select id="job" aria-label="Open role"></select></div>
+  <nav class="tabs" role="tablist" aria-label="Views">
+    <button role="tab" id="tab-matches" data-view="matches">Shortlist</button>
+    <button role="tab" id="tab-pool" data-view="pool">Talent pool</button>
+    <button role="tab" id="tab-how" data-view="how">How it works</button>
+  </nav>
+  <p class="foot">Simulated data from four conferences. Nothing leaves this page.</p>
+</aside>
+<main><div id="view"></div><div id="toast" class="toast" hidden role="status"></div></main>
+</div>
+<script>window.TALENTOPS_DATA = /*DATA*/;</script>
+<script>/*ENGINE*/</script>
+<script>/*UI*/</script>
+</body>
+</html>

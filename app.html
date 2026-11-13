@@ -1,0 +1,965 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TalentOps Conference Talent Pool</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..700&display=swap">
+<style>:root{
+  /* Doodle: paper canvas with a dot grid, navy ink outlines, hard offset shadows, slightly uneven corners.
+     Hand-lettered face for headings and buttons; a plain sans for dense evidence so it stays readable. */
+  --canvas:#f8f5ee; --dot:#ded8c9; --surface:#fffdf8; --ink:#263d5b; --text:#111827; --muted:#56657b; --line:#263d5b; --soft:#efeadf;
+  --brand:#49b6e5; --brand-ink:#0f2a44; --mark:#ebcdc3; --mark-ink:#263d5b;
+  --ok:#1d5c3a; --ok-bg:#e1efe4; --part:#7a4b0c; --part-bg:#f6ead0; --gap:#56657b; --gap-bg:#efeadf;
+  --c0:#263d5b; --c1:#6f819b; --c2:#a9b5c6; --c3:#d5dbe4; --c4:#ebcdc3;
+  --display:"DM Sans",system-ui,"Segoe UI",Arial,sans-serif; --body:"DM Sans",system-ui,"Segoe UI",Arial,sans-serif;
+  --r1:14px 18px 13px 17px / 17px 13px 18px 14px; --r2:10px 13px 9px 12px / 12px 9px 13px 10px; --r3:22px 26px 20px 25px / 25px 20px 26px 22px;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ color-scheme:dark;
+    --canvas:#1b2433; --dot:#2c3950; --surface:#232f43; --ink:#ece6d6; --text:#f1ede3; --muted:#a9b4c4; --line:#ece6d6; --soft:#2c3950;
+    --brand:#6cc6ee; --brand-ink:#0f2a44; --mark:#e9c3b6; --mark-ink:#1b2433;
+    --ok:#a9dcbc; --ok-bg:#243f33; --part:#ecd09a; --part-bg:#453a22; --gap:#a9b4c4; --gap-bg:#2c3950;
+    --c0:#ece6d6; --c1:#b3bccb; --c2:#7f8ca1; --c3:#4c5a72; --c4:#e9c3b6; }
+}
+:root[data-theme="dark"]{ color-scheme:dark;
+  --canvas:#1b2433; --dot:#2c3950; --surface:#232f43; --ink:#ece6d6; --text:#f1ede3; --muted:#a9b4c4; --line:#ece6d6; --soft:#2c3950;
+  --brand:#6cc6ee; --brand-ink:#0f2a44; --mark:#e9c3b6; --mark-ink:#1b2433;
+  --ok:#a9dcbc; --ok-bg:#243f33; --part:#ecd09a; --part-bg:#453a22; --gap:#a9b4c4; --gap-bg:#2c3950;
+  --c0:#ece6d6; --c1:#b3bccb; --c2:#7f8ca1; --c3:#4c5a72; --c4:#e9c3b6; }
+*{box-sizing:border-box}
+html,body{height:100%}
+html{font-family:var(--body);font-size:15px;line-height:1.5}
+body{margin:0;background:var(--canvas);color:var(--ink)}
+button,select,input{font:inherit;color:inherit}
+h1,h2,h3,p,dl,dd{margin:0}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px}
+.shell{display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100%}
+
+/* rail */
+.rail{background:var(--surface);border-inline-end:1px solid var(--line);padding:22px 14px;display:flex;flex-direction:column;gap:26px;position:sticky;top:0;height:100vh;overflow:auto}
+.brand{font-family:var(--display);font-weight:700;font-size:22px;letter-spacing:-.02em;padding:0 8px;line-height:1.1}
+.brand small{display:block;font-family:var(--body);font-weight:400;font-size:13px;letter-spacing:0;color:var(--muted);margin-top:4px}
+.rail h2{font-size:13px;font-weight:500;color:var(--muted);padding:0 8px;margin-bottom:6px}
+.rolebtn{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 8px;width:100%;text-align:start;background:none;border:0;border-radius:12px;padding:9px 10px;cursor:pointer}
+.rolebtn b{font-weight:600;font-size:14.5px;line-height:1.25}
+.rolebtn span{grid-column:1;font-size:12.5px;color:var(--muted)}
+.rolebtn i{grid-row:1 / span 2;grid-column:2;align-self:center;font-style:normal;font-family:var(--display);font-weight:600;font-size:15px;min-width:30px;height:30px;border-radius:15px;display:grid;place-items:center;background:var(--soft);font-variant-numeric:tabular-nums}
+.rolebtn:hover{background:var(--soft)}
+.rolebtn[aria-current="true"]{background:var(--ink);color:var(--surface)}
+.rolebtn[aria-current="true"] span{color:inherit;opacity:.72}
+.rolebtn[aria-current="true"] i{background:var(--mark);color:var(--mark-ink)}
+nav.tabs{display:flex;flex-direction:column;gap:2px}
+nav.tabs button{text-align:start;background:none;border:0;border-radius:10px;padding:8px 10px;cursor:pointer;font-weight:500;color:var(--muted)}
+nav.tabs button:hover{background:var(--soft);color:var(--ink)}
+nav.tabs button[aria-selected="true"]{background:var(--soft);color:var(--ink)}
+.rail .foot{margin-top:auto;font-size:12.5px;color:var(--muted);padding:0 8px}
+.jobpick{display:none}
+
+/* page */
+main{padding:28px clamp(16px,2.4vw,36px) 64px;min-width:0}
+.grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,.92fr);gap:28px;align-items:start;max-width:1320px}
+.jobcard h1,.pagehead h1{font-family:var(--display);font-size:clamp(28px,3vw,40px);font-weight:700;letter-spacing:-.025em;line-height:1.05;text-wrap:balance}
+.jobcard .meta{color:var(--muted);margin-top:6px}
+.lede{font-size:17px;line-height:1.45;margin-top:14px;max-width:56ch}
+.lede b{font-weight:600}
+.reqs{display:grid;grid-template-columns:auto 1fr;gap:8px 14px;margin-top:16px;font-size:13.5px;align-items:baseline}
+.reqs dt{color:var(--muted)} .reqs dd{display:flex;flex-wrap:wrap;gap:5px}
+.chip{display:inline-block;border-radius:7px;padding:1px 8px;font-size:12.5px;background:var(--soft);white-space:nowrap}
+.controls{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:22px 0 6px}
+.controls input[type=search]{flex:1 1 220px;min-width:0}
+select,input[type=search]{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 11px}
+.btn{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 14px;cursor:pointer;font-weight:500}
+.btn:hover{border-color:var(--muted)}
+.btn.primary{background:var(--brand);color:var(--brand-ink);border-color:var(--brand)}
+details.weights{margin-top:8px;border-radius:12px;background:var(--surface);border:1px solid var(--line)}
+details.weights summary{cursor:pointer;padding:10px 14px;font-weight:500}
+.wgrid{display:grid;grid-template-columns:130px 1fr 44px;gap:8px 12px;align-items:center;padding:4px 14px 12px;font-size:13.5px}
+.wgrid input{accent-color:var(--brand)} .wgrid output{font-variant-numeric:tabular-nums;text-align:end}
+.wnote{padding:0 14px 14px;color:var(--muted);font-size:13px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.wnote span{flex:1 1 260px}
+
+/* tiers and rows */
+.band{margin-top:22px}
+.band h2{font-family:var(--display);font-size:17px;font-weight:600;letter-spacing:-.01em;display:flex;gap:10px;align-items:baseline;margin-bottom:8px}
+.band h2 small{font-family:var(--body);font-weight:400;font-size:13px;color:var(--muted);letter-spacing:0}
+.row{display:grid;grid-template-columns:58px minmax(0,1fr) auto;gap:6px 14px;align-items:center;width:100%;text-align:start;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:border-color .12s}
+.row:hover{border-color:var(--muted)}
+.row[aria-current="true"]{border-color:var(--ink);box-shadow:0 0 0 1px var(--ink)}
+.score{font-family:var(--display);font-size:24px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums;line-height:1}
+.band:first-of-type .row .score{background:var(--mark);color:var(--mark-ink);border-radius:10px;padding:8px 0;text-align:center}
+.row .who b{font-weight:600;font-size:15.5px} .row .who span{color:var(--muted)}
+.row .who{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.strip{grid-column:1 / -1;display:flex;gap:4px;min-width:0}
+.seg{flex:1 1 0;min-width:0;border-radius:7px;padding:3px 7px;font-size:12px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.seg.full{background:var(--ok-bg);color:var(--ok)}
+.seg.partial{background:var(--part-bg);color:var(--part)}
+.seg.to_verify{background:transparent;color:var(--gap);box-shadow:inset 0 0 0 1px var(--line)}
+.seg::before{font-weight:700;margin-inline-end:4px}
+.seg.full::before{content:"\2713"} .seg.partial::before{content:"\2248"} .seg.to_verify::before{content:"?"}
+.pill{display:inline-block;border-radius:999px;padding:2px 10px;font-size:12.5px;font-weight:500;white-space:nowrap}
+.pill.full,.pill.worked_together,.pill.in_domain{background:var(--ok-bg);color:var(--ok)}
+.pill.partial,.pill.same_employer,.pill.adjacent{background:var(--part-bg);color:var(--part)}
+.pill.to_verify,.pill.linkedin_only,.pill.none,.pill.outside,.pill.unknown{background:var(--gap-bg);color:var(--gap)}
+.below{margin-top:24px}
+.below summary{cursor:pointer;color:var(--muted);font-weight:500;padding:6px 0}
+.below .row{background:transparent}
+.legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12.5px;color:var(--muted);margin-top:14px;align-items:center}
+.legend .seg{flex:0 0 auto}
+
+/* evidence sheet */
+.detail{position:sticky;top:20px;background:var(--surface);border:1px solid var(--line);border-radius:20px;overflow:hidden}
+.pad{padding:22px 24px}
+.detail .head{display:flex;justify-content:space-between;gap:16px;align-items:flex-start}
+.detail h2{font-family:var(--display);font-size:28px;font-weight:700;letter-spacing:-.025em;line-height:1.1}
+.detail .big{font-family:var(--display);font-size:44px;font-weight:700;letter-spacing:-.03em;font-variant-numeric:tabular-nums;line-height:.9;text-align:end}
+.detail .big small{display:block;font-family:var(--body);font-size:12.5px;font-weight:400;letter-spacing:0;color:var(--muted);margin-top:8px;line-height:1.2}
+.next{background:var(--ink);color:var(--surface);border-radius:14px;padding:14px 16px;margin-top:16px}
+.next b{display:block;font-size:13px;font-weight:500;opacity:.7;margin-bottom:2px}
+.sec{border-top:1px solid var(--line);padding:18px 24px}
+.sec h3{font-family:var(--display);font-size:16px;font-weight:600;letter-spacing:-.01em;margin-bottom:10px}
+.sec h3 small{font-family:var(--body);font-weight:400;font-size:13px;color:var(--muted);letter-spacing:0;margin-inline-start:6px}
+table.ev{width:100%;border-collapse:collapse;font-size:14px}
+table.ev td{padding:8px 10px 8px 0;vertical-align:top;border-top:1px solid var(--soft)}
+table.ev tr:first-child td{border-top:0}
+table.ev td:first-child{width:104px} table.ev td:nth-child(2){font-weight:600;width:30%}
+table.ev .why{color:var(--muted)} table.ev .why b{color:var(--ink);font-weight:600}
+.stack{display:flex;height:14px;border-radius:7px;overflow:hidden;background:var(--soft);gap:2px}
+.stack i{display:block;height:100%}
+.stack .s0{background:var(--brand)} .stack .s1{background:color-mix(in srgb,var(--brand) 62%,var(--surface))} .stack .s2{background:var(--ink)} .stack .s3{background:var(--muted)} .stack .s4{background:var(--mark)}
+.parts{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:6px 16px;margin-top:10px;font-size:13.5px}
+.parts span{display:flex;gap:7px;align-items:baseline}
+.parts em{font-style:normal;color:var(--muted);margin-inline-start:auto;font-variant-numeric:tabular-nums}
+.parts u{display:inline-block;width:10px;height:10px;border-radius:3px;text-decoration:none;flex:none;transform:translateY(1px)}
+.conn{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:2px 12px;align-items:center;padding:7px 0}
+.conn .av{grid-row:1 / span 2;width:36px;height:36px;border-radius:50%;background:var(--soft);display:grid;place-items:center;font-weight:600;font-size:13px}
+.conn b{font-weight:600} .conn .d{grid-column:2 / -1;color:var(--muted);font-size:13.5px}
+.kv{display:grid;grid-template-columns:128px 1fr;gap:6px 12px;font-size:14px}
+.kv dt{color:var(--muted)}
+.muted{color:var(--muted)} .small{font-size:13px}
+hr.sep{border:0;border-top:1px solid var(--soft);margin:12px 0}
+
+/* pool and how-it-works */
+.pagehead{max-width:1320px}
+.pagehead p{color:var(--muted);max-width:68ch;margin-top:8px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:16px}
+.tablewrap{overflow-x:auto;max-width:1320px}
+table.pool{width:100%;border-collapse:collapse;font-size:14px;min-width:920px}
+table.pool th{text-align:start;font-weight:500;color:var(--muted);padding:12px 14px;border-bottom:1px solid var(--line);white-space:nowrap}
+table.pool td{padding:10px 14px;border-bottom:1px solid var(--soft);vertical-align:top}
+table.pool tr:last-child td{border-bottom:0}
+.importbox{max-width:1320px;margin-top:20px}
+.importbox h3{font-family:var(--display);font-size:17px;font-weight:600}
+.import{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;align-items:end;margin-top:12px}
+.import label{display:block;font-size:13px;color:var(--muted);margin-bottom:4px}
+.notice{background:var(--part-bg);color:var(--part);border-radius:12px;padding:12px 14px;margin-top:14px;font-size:14px}
+.notice ul{margin:6px 0 0;padding-inline-start:18px}
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:0;max-width:1320px;margin-top:22px;border:1px solid var(--line);border-radius:16px;overflow:hidden;background:var(--surface)}
+.steps div{padding:20px 22px;border-inline-end:1px solid var(--line)}
+.steps div:last-child{border-inline-end:0}
+.steps .n{font-family:var(--display);font-size:34px;font-weight:700;line-height:1;color:var(--brand)}
+.steps h3{font-family:var(--display);font-size:17px;font-weight:600;margin:8px 0 4px}
+.block{max-width:1320px;margin-top:20px}
+.block h3{font-family:var(--display);font-size:19px;font-weight:600;letter-spacing:-.01em}
+table.terms{width:100%;border-collapse:collapse;font-size:14px;min-width:780px}
+table.terms th{text-align:start;font-weight:500;color:var(--muted);padding:10px 14px;border-bottom:1px solid var(--line)}
+table.terms td{padding:8px 14px;border-top:1px solid var(--soft);vertical-align:top}
+table.terms tr.g td{font-family:var(--display);font-weight:600;font-size:15px;padding-top:18px;border-top:0}
+.toast{position:fixed;inset-inline:0;bottom:18px;margin:0 auto;width:max-content;max-width:90%;background:var(--ink);color:var(--surface);border-radius:10px;padding:10px 16px;font-size:14px;z-index:5}
+textarea.csv{width:100%;height:150px;margin-top:10px;font-family:ui-monospace,Menlo,Consolas,monospace;font-size:12px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);padding:10px}
+
+@media (max-width:1120px){.grid{grid-template-columns:minmax(0,1fr)}.detail{position:static}}
+@media (max-width:820px){
+  .shell{grid-template-columns:minmax(0,1fr)}
+  .rail{position:static;height:auto;flex-direction:row;flex-wrap:wrap;align-items:center;gap:10px 16px;padding:12px 16px;border-inline-end:0;border-bottom:1px solid var(--line)}
+  .rail .roles,.rail .foot{display:none} .jobpick{display:block;flex:1 1 200px} .jobpick select{width:100%}
+  nav.tabs{flex-direction:row}
+  .steps div{border-inline-end:0;border-bottom:1px solid var(--line)}
+}
+@media (max-width:520px){.row{grid-template-columns:50px minmax(0,1fr)}.row .right{grid-column:2}.strip{grid-column:1 / -1;flex-wrap:wrap}.seg{flex:1 1 30%}.kv{grid-template-columns:1fr}.wgrid{grid-template-columns:104px 1fr 40px}}
+@media (prefers-reduced-motion: reduce){*{transition:none!important}}
+
+/* ---------- doodle layer ---------- */
+body{color:var(--text);background-color:var(--canvas);background-image:radial-gradient(var(--dot) 1.2px,transparent 1.3px);background-size:22px 22px}
+h1,h2,h3,.brand,.score,.detail .big,.steps .n,.btn,.rolebtn b,nav.tabs button,details.weights summary{font-family:var(--display);font-weight:400;letter-spacing:0;color:var(--ink)}
+.brand{font-size:26px} .jobcard h1,.pagehead h1{font-size:clamp(34px,3.6vw,50px);line-height:1.05}
+.band h2{font-size:21px} .sec h3{font-size:19px} .detail h2{font-size:32px} .detail .big{font-size:48px} .score{font-size:23px}
+.band h2 small,.sec h3 small{font-family:var(--body)}
+.rail{background:var(--surface);border-inline-end:3px solid var(--ink)}
+.rail h2{font-family:var(--body);font-weight:500;color:var(--muted)}
+.rolebtn{border:2.5px solid transparent;border-radius:var(--r1);margin-bottom:6px}
+.rolebtn:hover{background:var(--soft)}
+.rolebtn i{font-family:var(--display);font-weight:400;border:2px solid var(--ink);background:var(--surface);color:var(--ink)}
+.rolebtn[aria-current="true"]{background:var(--brand);color:var(--brand-ink);border-color:var(--ink);box-shadow:4px 4px 0 var(--ink)}
+.rolebtn[aria-current="true"] b{color:var(--brand-ink)} .rolebtn[aria-current="true"] i{background:var(--surface);color:#263d5b}
+nav.tabs button{font-size:16px;border-radius:var(--r2);border:2px solid transparent}
+nav.tabs button[aria-selected="true"]{background:var(--mark);color:var(--mark-ink);border-color:var(--ink)}
+.chip{background:var(--surface);border:1.5px solid var(--ink);border-radius:var(--r2);color:var(--ink)}
+select,input[type=search]{border:2.5px solid var(--ink);border-radius:var(--r2);background:var(--surface);color:var(--text)}
+.btn{font-size:16px;border:2.5px solid var(--ink);border-radius:var(--r2);background:var(--surface);box-shadow:4px 4px 0 var(--ink);padding:8px 16px;transition:transform .08s,box-shadow .08s}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink);border-color:var(--ink)}
+.btn:active{transform:translate(3px,3px);box-shadow:1px 1px 0 var(--ink)}
+.btn.primary{background:var(--mark);color:var(--mark-ink);border-color:var(--ink)}
+.controls{gap:12px}
+details.weights{border:2.5px solid var(--ink);border-radius:var(--r1);margin-top:14px}
+.wgrid input{accent-color:var(--ink)}
+.row{border:2.5px solid var(--ink);border-radius:var(--r1);box-shadow:4px 4px 0 var(--ink);margin-bottom:14px;transition:transform .08s,box-shadow .08s}
+.row:hover{transform:translate(-1px,-1px);box-shadow:5px 5px 0 var(--ink);border-color:var(--ink)}
+.row[aria-current="true"]{background:var(--mark);border-color:var(--ink);box-shadow:6px 6px 0 var(--ink)}
+.row[aria-current="true"] .who span{color:var(--mark-ink)}
+.row .who b{color:var(--ink)}
+.band:first-of-type .row .score{background:var(--brand);color:var(--brand-ink);border:2px solid var(--ink);border-radius:var(--r2);transform:rotate(-3deg);padding:7px 0}
+.seg{border-radius:8px 10px 7px 9px;border:1.5px solid var(--ink)}
+.seg.full{background:var(--ok-bg);color:var(--ok)} .seg.partial{background:var(--part-bg);color:var(--part)}
+.seg.to_verify{background:var(--surface);color:var(--gap);border-style:dashed;box-shadow:none}
+.pill{border:1.5px solid var(--ink)}
+.below .row{box-shadow:none;border-style:dashed}
+.detail{border:3px solid var(--ink);border-radius:var(--r3);box-shadow:7px 7px 0 var(--ink)}
+.next{background:var(--mark);color:var(--mark-ink);border:2.5px solid var(--ink);border-radius:var(--r1)}
+.next b{font-family:var(--display);font-weight:400;font-size:16px;opacity:1}
+.sec{border-top:2px dashed var(--ink)}
+table.ev td{border-top:1.5px dotted var(--muted)}
+.stack{height:18px;border:2px solid var(--ink);border-radius:9px 11px 8px 10px;background:var(--surface);gap:0}
+.stack i+i{border-inline-start:2px solid var(--ink)}
+.stack .s0{background:var(--c0)} .stack .s1{background:var(--c1)} .stack .s2{background:var(--c2)} .stack .s3{background:var(--c3)} .stack .s4{background:var(--c4)}
+.parts u{border:1.5px solid var(--ink)}
+.conn .av{border:2px solid var(--ink);background:var(--surface);font-family:var(--display);font-weight:400;color:var(--ink)}
+.card,.steps{border:2.5px solid var(--ink);border-radius:var(--r1);box-shadow:5px 5px 0 var(--ink)}
+.steps div{border-inline-end:2px dashed var(--ink)} .steps .n{color:var(--brand);-webkit-text-stroke:1px var(--ink)}
+table.pool th,table.terms th{border-bottom:2px solid var(--ink)}
+.notice{border:2px solid var(--ink);border-radius:var(--r1)}
+.toast{border:2px solid var(--surface);border-radius:var(--r2);background:var(--ink);color:var(--surface);font-family:var(--display)}
+textarea.csv{border:2.5px solid var(--ink);border-radius:var(--r2)}
+:focus-visible{outline:3px solid var(--brand);outline-offset:3px}
+.legend .seg{font-size:12.5px}
+@media (max-width:820px){.rail{border-inline-end:0;border-bottom:3px solid var(--ink)}.steps div{border-inline-end:0;border-bottom:2px dashed var(--ink)}}
+.detail .big small{white-space:nowrap}
+.rolebtn b{font-size:16px} .brand small{font-family:var(--body)}
+
+/* ---------- calmer pass: one plain typeface, one accent ---------- */
+h1,h2,h3,.brand,.score,.detail .big,.steps .n,.btn,.rolebtn b,nav.tabs button,details.weights summary,.next b,.conn .av,.rolebtn i,.toast{font-family:var(--body)}
+h1,h2,h3,.brand,.detail .big,.steps .n{font-weight:700;letter-spacing:-.02em}
+.score{font-weight:700;letter-spacing:-.02em;font-size:21px}
+.btn,nav.tabs button,details.weights summary,.rolebtn b,.next b{font-weight:600}
+.brand{font-size:23px} .jobcard h1,.pagehead h1{font-size:clamp(30px,3.2vw,42px)} .detail h2{font-size:27px} .detail .big{font-size:42px}
+.band h2{font-size:18px} .sec h3{font-size:17px} .rolebtn b{font-size:14.5px} nav.tabs button{font-size:15px} .btn{font-size:15px} .next b{font-size:13.5px}
+.rolebtn[aria-current="true"]{background:var(--mark);color:var(--mark-ink)} .rolebtn[aria-current="true"] b{color:var(--mark-ink)} .rolebtn[aria-current="true"] i{color:var(--ink)}
+.band:first-of-type .row .score{background:var(--surface);color:var(--ink);transform:rotate(-2deg)}
+.steps .n{color:var(--ink);-webkit-text-stroke:0}
+:focus-visible{outline-color:var(--ink)}
+
+/* ---------- softer pass: thinner ink, shorter shadows, nothing tilted ---------- */
+:root{--r1:13px 15px 12px 14px / 14px 12px 15px 13px; --r2:9px 11px 9px 10px / 10px 9px 11px 9px; --r3:19px 21px 18px 20px / 20px 18px 21px 19px}
+body{background-image:radial-gradient(var(--dot) 1px,transparent 1.1px);background-size:24px 24px}
+.rail{border-inline-end-width:1.5px}
+.rolebtn{border-width:1.5px} .rolebtn i{border-width:1.5px}
+.rolebtn[aria-current="true"]{box-shadow:2px 2px 0 var(--ink)}
+nav.tabs button{border-width:1.5px}
+.chip{border-width:1px}
+select,input[type=search],textarea.csv{border-width:1.5px}
+.btn{border-width:1.5px;box-shadow:2px 2px 0 var(--ink)}
+.btn:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
+.btn:active{transform:translate(2px,2px);box-shadow:0 0 0 var(--ink)}
+details.weights{border-width:1.5px}
+.row{border-width:1.5px;box-shadow:2px 2px 0 var(--ink);margin-bottom:10px}
+.row:hover{transform:translate(-1px,-1px);box-shadow:3px 3px 0 var(--ink)}
+.row[aria-current="true"]{box-shadow:3px 3px 0 var(--ink)}
+.band:first-of-type .row .score{transform:none;border-width:1.5px}
+.seg{border-width:1px} .pill{border-width:1px}
+.below .row{border-width:1.5px}
+.detail{border-width:2px;box-shadow:4px 4px 0 var(--ink)}
+.next{border-width:1.5px}
+.sec{border-top:1.5px dashed color-mix(in srgb,var(--ink) 45%,transparent)}
+table.ev td{border-top:1px dotted color-mix(in srgb,var(--ink) 30%,transparent)}
+.stack{border-width:1.5px;height:16px} .stack i+i{border-inline-start-width:1.5px}
+.parts u{border-width:1px} .conn .av{border-width:1.5px}
+.card,.steps{border-width:1.5px;box-shadow:3px 3px 0 var(--ink)}
+.steps div{border-inline-end:1.5px dashed color-mix(in srgb,var(--ink) 45%,transparent)}
+table.pool th,table.terms th{border-bottom-width:1.5px}
+.notice{border-width:1.5px}
+@media (max-width:820px){.rail{border-bottom-width:1.5px}}
+</style>
+</head>
+<body>
+<div class="shell">
+<aside class="rail">
+  <div class="brand">TalentOps<small>People we met, ready when a role opens</small></div>
+  <div class="roles"><h2>Open roles</h2><div id="roles"></div></div>
+  <div class="jobpick"><select id="job" aria-label="Open role"></select></div>
+  <nav class="tabs" role="tablist" aria-label="Views">
+    <button role="tab" id="tab-matches" data-view="matches">Shortlist</button>
+    <button role="tab" id="tab-pool" data-view="pool">Talent pool</button>
+    <button role="tab" id="tab-how" data-view="how">How it works</button>
+  </nav>
+  <p class="foot">Simulated data from four conferences. Nothing leaves this page.</p>
+</aside>
+<main><div id="view"></div><div id="toast" class="toast" hidden role="status"></div></main>
+</div>
+<script>window.TALENTOPS_DATA = {"attendees":"hubspot_id,full_name,email,company,title,conference_name,conference_domain,conference_date,source,notes,linkedin_url\nHS001,James Thornton,james.thornton@sportsvision.io,SportsVision,ML Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-14,Conference - Badge Scan,,linkedin.com/in/james-thornton-ml\nHS002,Priya Anand,priya.anand@vidstream.com,VidStream,Senior Computer Vision Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-14,Conference - Badge Scan,\"Spoke about real-time tracking project\",linkedin.com/in/priya-anand-cv\nHS003,Carlos Mendez,c.mendez@healthdata.net,HealthData Inc,Data Scientist,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-14,Conference - Badge Scan,,linkedin.com/in/carlos-mendez-ds\nHS004,Emily Carter,emily.carter@broadcastai.com,BroadcastAI,Video AI Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-14,Conference - Badge Scan,\"Very strong background in broadcast\",linkedin.com/in/emily-carter-video\nHS005,Tom Nguyen,tom.nguyen@financeflow.com,FinanceFlow,Senior Software Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-14,Conference - Badge Scan,,linkedin.com/in/tom-nguyen-fin\nHS006,Amir Hassan,amir.hassan@sportstats.io,SportStats,Sports Data Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-14,Conference - Badge Scan,\"Mentioned interest in video tech\",linkedin.com/in/amir-hassan-sports\nHS007,Rachel Kim,r.kim@mediapipe.co,MediaPipe Co,Backend Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-14,Conference - Badge Scan,,linkedin.com/in/rachel-kim-be\nHS008,Daniel Brown,d.brown@realestatex.com,RealEstateX,Product Manager,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-14,Conference - Badge Scan,,linkedin.com/in/daniel-brown-pm\nHS009,Sophie Martin,sophie.martin@ottplatform.com,StreamOTT,Senior Platform Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-14,Conference - Badge Scan,\"Works on live sports streaming pipeline\",linkedin.com/in/sophie-martin-ott\nHS010,Ben Walker,ben.walker@retailtech.com,RetailTech,Software Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-14,Conference - Badge Scan,,linkedin.com/in/ben-walker-retail\nHS011,Yuki Tanaka,yuki.tanaka@nba.com,NBA,Data Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-14,Conference - Badge Scan,\"Team at NBA working on player tracking\",linkedin.com/in/yuki-tanaka-nba\nHS012,Laura Gibson,l.gibson@hospitalgroup.org,City Hospital Group,IT Manager,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-14,Conference - Badge Scan,,linkedin.com/in/laura-gibson-health\nHS013,Marcus Reid,m.reid@statsperform.com,Stats Perform,ML Research Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-14,Conference - Badge Scan,\"Published papers on sports event detection\",linkedin.com/in/marcus-reid-ml\nHS014,Anna Petrov,anna.petrov@govtech.gov,GovTech Agency,Software Developer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-14,Conference - Badge Scan,,linkedin.com/in/anna-petrov-gov\nHS015,Chris Lee,c.lee@sportradar.com,Sportradar,Senior Backend Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-14,Conference - Badge Scan,\"5 yrs at Sportradar on data feeds\",linkedin.com/in/chris-lee-sportradar\nHS016,Jennifer Adams,j.adams@insurancetech.com,InsureTech,Data Analyst,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-14,Conference - Badge Scan,,linkedin.com/in/jennifer-adams-ins\nHS017,Ryan Patel,ryan.patel@dazn.com,DAZN,Senior Data Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-14,Conference - Badge Scan,\"Works on real-time sports data ingestion at DAZN\",linkedin.com/in/ryan-patel-dazn\nHS018,Olivia Scott,o.scott@marketingco.com,MarketingCo,Digital Marketing Manager,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-14,Conference - Badge Scan,,linkedin.com/in/olivia-scott-mktg\nHS019,Nathan Brooks,n.brooks@secondspectrum.com,Second Spectrum,Computer Vision Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-14,Conference - Badge Scan,\"Tracking algorithms for NBA/EPL\",linkedin.com/in/nathan-brooks-cv\nHS020,Zoe Wright,zoe.wright@legaltech.io,LegalTech,Software Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-14,Conference - Badge Scan,,linkedin.com/in/zoe-wright-legal\nHS021,Alex Turner,a.turner@olympicchannel.com,Olympic Channel,Product Manager - Data,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-14,Conference - Badge Scan,\"Building data products for broadcast rights\",linkedin.com/in/alex-turner-olym\nHS022,Isabella Moore,i.moore@edtech.edu,EduTech,Backend Developer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-14,Conference - Badge Scan,,linkedin.com/in/isabella-moore-edu\nHS023,Ethan Clark,e.clark@aws.com,Amazon Web Services,Solutions Architect - Media,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-14,Conference - Badge Scan,\"Focused on sports media clients at AWS\",linkedin.com/in/ethan-clark-aws\nHS024,Mia Johnson,mia.johnson@foodtech.co,FoodTech,Data Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-14,Conference - Badge Scan,,linkedin.com/in/mia-johnson-food\nHS025,Lucas Evans,l.evans@img.com,IMG Media,Senior ML Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-15,Conference - Badge Scan,\"Computer vision for sports highlights\",linkedin.com/in/lucas-evans-img\nHS026,Grace Wilson,g.wilson@cybersecurity.io,CyberShield,DevOps Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-15,Conference - Badge Scan,,linkedin.com/in/grace-wilson-cyber\nHS027,Jack Thomas,j.thomas@performancelab.io,Performance Lab,Sports Science Data Analyst,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-15,Conference - Badge Scan,\"Works with professional football clubs\",linkedin.com/in/jack-thomas-sport\nHS028,Chloe Martinez,c.martinez@banking.com,National Bank,Software Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-15,Conference - Badge Scan,,linkedin.com/in/chloe-martinez-bank\nHS029,Noah Anderson,n.anderson@genius-sports.com,Genius Sports,Data Platform Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-15,Conference - Badge Scan,\"Betting data & sports integrity pipelines\",linkedin.com/in/noah-anderson-gs\nHS030,Lily Thompson,l.thompson@pharmatech.com,PharmaTech,Data Scientist,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-15,Conference - Badge Scan,,linkedin.com/in/lily-thompson-pharma\nHS031,Owen Jackson,o.jackson@fox-sports.com,Fox Sports Digital,Backend Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-15,Conference - Badge Scan,\"Streaming infrastructure for live sports\",linkedin.com/in/owen-jackson-fox\nHS032,Aria White,a.white@logistics.co,LogiCo,Software Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-15,Conference - Badge Scan,,linkedin.com/in/aria-white-logi\nHS033,Liam Harris,l.harris@kinexon.com,KINEXON Sports,Senior Backend Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-15,Conference - Badge Scan,\"Real-time IoT data processing for sports\",linkedin.com/in/liam-harris-kinexon\nHS034,Emma Lewis,e.lewis@agritech.io,AgriTech,Product Manager,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-15,Conference - Badge Scan,,linkedin.com/in/emma-lewis-agri\nHS035,Mason Young,m.young@skysports.com,Sky Sports,ML Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-15,Conference - Badge Scan,\"Automated highlight generation at Sky\",linkedin.com/in/mason-young-sky\nHS036,Charlotte Hall,c.hall@telecom.net,TelecomNet,Network Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-15,Conference - Badge Scan,,linkedin.com/in/charlotte-hall-tel\nHS037,Elijah Allen,e.allen@deltatre.com,Deltatre,Senior Product Manager,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-15,Conference - Badge Scan,\"OTT and digital sports products for broadcasters\",linkedin.com/in/elijah-allen-deltatre\nHS038,Amelia King,a.king@pettech.com,PetTech,Data Analyst,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-15,Conference - Badge Scan,,linkedin.com/in/amelia-king-pet\nHS039,Henry Wright,h.wright@warnermedia.com,Warner Media Sports,Data Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-15,Conference - Badge Scan,\"Sports broadcast data pipelines\",linkedin.com/in/henry-wright-wm\nHS040,Scarlett Green,s.green@nfl.com,NFL,Senior Data Engineer,SportsTech Innovation Summit,Sports Technology & Analytics,2024-11-15,Conference - Badge Scan,\"Player analytics and game data at NFL\",linkedin.com/in/scarlett-green-nfl\nHS041,Viktor Novak,v.novak@databricks.com,Databricks,Senior Data Engineer,Data & AI Summit Europe,Data Engineering & AI/ML,2025-03-20,Conference - Badge Scan,\"Works on Spark optimization and lakehouse\",linkedin.com/in/viktor-novak-de\nHS042,Fatima Al-Rashid,f.alrashid@sportinggroup.com,Sporting Analytics Group,Head of Data,Data & AI Summit Europe,Data Engineering & AI/ML,2025-03-20,Conference - Badge Scan,\"Runs data team for 3 football clubs\",linkedin.com/in/fatima-alrashid-data\nHS043,George Patterson,g.patterson@cloudretail.com,CloudRetail,Data Platform Engineer,Data & AI Summit Europe,Data Engineering & AI/ML,2025-03-20,Conference - Badge Scan,,linkedin.com/in/george-patterson-cloud\nHS044,Sara Lindqvist,s.lindqvist@viaplay.com,Viaplay,Senior ML Engineer,Data & AI Summit Europe,Data Engineering & AI/ML,2025-03-20,Conference - Badge Scan,\"Recommendation engine for sports streaming\",linkedin.com/in/sara-lindqvist-ml\nHS045,Marcus Webb,m.webb@pharma-analytics.com,PharmaAnalytics,Data Engineer,Data & AI Summit Europe,Data Engineering & AI/ML,2025-03-20,Conference - Badge Scan,,linkedin.com/in/marcus-webb-pharma\nHS046,Jin Park,j.park@statsperform.com,Stats Perform,Principal Data Scientist,Data & AI Summit Europe,Data Engineering & AI/ML,2025-03-20,Conference - Badge Scan,\"Deep learning models for event prediction in football\",linkedin.com/in/jin-park-stats\nHS047,Katarzyna Wojcik,k.wojcik@insurance-group.pl,InsuranceGroup PL,Analytics Engineer,Data & AI Summit Europe,Data Engineering & AI/ML,2025-03-21,Conference - Badge Scan,,linkedin.com/in/katarzyna-wojcik-ins\nHS048,Bruno Ferreira,b.ferreira@benfica-lab.com,Benfica Lab,Sports Data Scientist,Data & AI Summit Europe,Data Engineering & AI/ML,2025-03-21,Conference - Badge Scan,\"Player performance modeling at Benfica\",linkedin.com/in/bruno-ferreira-benfica\nHS049,Ingrid Svensson,i.svensson@klarna.com,Klarna,Data Engineer,Data & AI Summit Europe,Data Engineering & AI/ML,2025-03-21,Conference - Badge Scan,,linkedin.com/in/ingrid-svensson-klarna\nHS050,Tobias Braun,t.braun@aws.com,Amazon Web Services,ML Solutions Architect,Data & AI Summit Europe,Data Engineering & AI/ML,2025-03-21,Conference - Badge Scan,\"Sports & media verticals at AWS EMEA\",linkedin.com/in/tobias-braun-aws\nHS051,Adaora Okafor,a.okafor@mediasports.ng,MediaSports Africa,Head of Technology,Data & AI Summit Europe,Data Engineering & AI/ML,2025-03-21,Conference - Badge Scan,\"Building video analytics platform for African leagues\",linkedin.com/in/adaora-okafor-tech\nHS052,Pavel Horak,p.horak@govdata.cz,GovData CZ,Data Analyst,Data & AI Summit Europe,Data Engineering & AI/ML,2025-03-21,Conference - Badge Scan,,linkedin.com/in/pavel-horak-gov\nHS053,Tom Barker,t.barker@akamai.com,Akamai Technologies,Senior DevOps Engineer,DevOps World 2025,DevOps & Platform Engineering,2025-04-10,Conference - Badge Scan,\"CDN and streaming infrastructure\",linkedin.com/in/tom-barker-akamai\nHS054,Mei Zhang,m.zhang@cloudnative.io,CloudNative Labs,Platform Engineer,DevOps World 2025,DevOps & Platform Engineering,2025-04-10,Conference - Badge Scan,,linkedin.com/in/mei-zhang-platform\nHS055,Rafa Torres,r.torres@sportradar.com,Sportradar,Site Reliability Engineer,DevOps World 2025,DevOps & Platform Engineering,2025-04-10,Conference - Badge Scan,\"Runs SRE for live data ingestion pipelines\",linkedin.com/in/rafa-torres-sre\nHS056,Kim Soo-Jin,k.soojin@samsung.com,Samsung SDS,DevOps Lead,DevOps World 2025,DevOps & Platform Engineering,2025-04-10,Conference - Badge Scan,,linkedin.com/in/kim-soojin-devops\nHS057,Alexei Volkov,a.volkov@dazn.com,DAZN,Infrastructure Engineer,DevOps World 2025,DevOps & Platform Engineering,2025-04-10,Conference - Badge Scan,\"Kubernetes platform for live sports streaming at DAZN\",linkedin.com/in/alexei-volkov-dazn\nHS058,Nadia Osei,n.osei@healthcloud.com,HealthCloud,Cloud Engineer,DevOps World 2025,DevOps & Platform Engineering,2025-04-10,Conference - Badge Scan,,linkedin.com/in/nadia-osei-cloud\nHS059,David Petersen,d.petersen@warnermedia.com,Warner Media,Senior SRE,DevOps World 2025,DevOps & Platform Engineering,2025-04-11,Conference - Badge Scan,\"Reliability engineering for Turner Sports broadcast\",linkedin.com/in/david-petersen-sre\nHS060,Hana Blum,h.blum@agtech.de,AgTech Berlin,DevOps Engineer,DevOps World 2025,DevOps & Platform Engineering,2025-04-11,Conference - Badge Scan,,linkedin.com/in/hana-blum-agtech\nHS061,Stefano Conti,s.conti@sky-italia.com,Sky Italia,Platform Architect,DevOps World 2025,DevOps & Platform Engineering,2025-04-11,Conference - Badge Scan,\"Multi-region streaming infrastructure at Sky\",linkedin.com/in/stefano-conti-sky\nHS062,Jerome Blanc,j.blanc@canal-plus.com,Canal+,Senior Infrastructure Engineer,DevOps World 2025,DevOps & Platform Engineering,2025-04-11,Conference - Badge Scan,\"Live event delivery platform for Ligue 1\",linkedin.com/in/jerome-blanc-canal\nHS063,Amara Diallo,a.diallo@telecoms.sn,TelecomSN,Network Engineer,DevOps World 2025,DevOps & Platform Engineering,2025-04-11,Conference - Badge Scan,,linkedin.com/in/amara-diallo-telecom\nHS064,Pilar Reyes,p.reyes@ott-latam.com,OTT Latam,Video Streaming Engineer,Broadcast & Streaming Technology Expo,Broadcast & Video Technology,2025-02-06,Conference - Badge Scan,\"Live sports streaming for Latin American broadcasters\",linkedin.com/in/pilar-reyes-ott\nHS065,Sven Hartmann,s.hartmann@arri.com,ARRI,Camera Systems Engineer,Broadcast & Streaming Technology Expo,Broadcast & Video Technology,2025-02-06,Conference - Badge Scan,,linkedin.com/in/sven-hartmann-arri\nHS066,Nia Campbell,n.campbell@bbc-sport.co.uk,BBC Sport,Senior Video Engineer,Broadcast & Streaming Technology Expo,Broadcast & Video Technology,2025-02-06,Conference - Badge Scan,\"Real-time highlight clipping pipeline at BBC\",linkedin.com/in/nia-campbell-bbc\nHS067,Javier Morales,j.morales@teledeporte.es,TeleDeporte,Broadcast Engineer,Broadcast & Streaming Technology Expo,Broadcast & Video Technology,2025-02-06,Conference - Badge Scan,,linkedin.com/in/javier-morales-tv\nHS068,Chiara Russo,c.russo@mediaset.it,Mediaset,Senior ML Engineer - Video,Broadcast & Streaming Technology Expo,Broadcast & Video Technology,2025-02-06,Conference - Badge Scan,\"Automated sports clipping and captioning\",linkedin.com/in/chiara-russo-video\nHS069,Lars Andersen,l.andersen@ericsson.com,Ericsson,Solutions Architect - Broadcast,Broadcast & Streaming Technology Expo,Broadcast & Video Technology,2025-02-07,Conference - Badge Scan,\"5G broadcast for live sports events\",linkedin.com/in/lars-andersen-ericsson\nHS070,Yael Ben-David,y.bendavid@akamai.com,Akamai Technologies,Media Delivery Engineer,Broadcast & Streaming Technology Expo,Broadcast & Video Technology,2025-02-07,Conference - Badge Scan,\"CDN optimization for live sports at Akamai\",linkedin.com/in/yael-bendavid-akamai\nHS071,Patrick Duval,p.duval@textileindustry.fr,TextileInd,IT Engineer,Broadcast & Streaming Technology Expo,Broadcast & Video Technology,2025-02-07,Conference - Badge Scan,,linkedin.com/in/patrick-duval-textile\nHS072,Marta Kowalska,m.kowalska@imgmedia.com,IMG Media,Video Systems Engineer,Broadcast & Streaming Technology Expo,Broadcast & Video Technology,2025-02-07,Conference - Badge Scan,\"Multi-camera production pipelines for sports rights\",linkedin.com/in/marta-kowalska-img\nHS073,Felix Obi,f.obi@healthstream.ng,HealthStream,Software Engineer,Broadcast & Streaming Technology Expo,Broadcast & Video Technology,2025-02-07,Conference - Badge Scan,,linkedin.com/in/felix-obi-health\nHS074,Claudia Vogel,c.vogel@eurosport.de,Eurosport Germany,Product Manager - Streaming,Broadcast & Streaming Technology Expo,Broadcast & Video Technology,2025-02-07,Conference - Badge Scan,\"OTT product for sports rights across 12 markets\",linkedin.com/in/claudia-vogel-eurosport\nHS075,David Strauss,d.strauss@nba.com,NBA,Senior Video Platform Engineer,Broadcast & Streaming Technology Expo,Broadcast & Video Technology,2025-02-07,Conference - Badge Scan,\"League Pass streaming infrastructure globally\",linkedin.com/in/david-strauss-nba\n","profiles":"linkedin_url,full_name,current_company,current_title,location,years_experience,top_skills,industry,past_companies,past_titles,wsc_mutual_connections\nlinkedin.com/in/james-thornton-ml,James Thornton,SportsVision,ML Engineer,London UK,5,\"Python;PyTorch;Computer Vision;TensorFlow;Sports Analytics\",Sports Technology,\"Opta Sports;freelance\",\"ML Engineer at Opta Sports (2019-2022);Data Science Intern at Sky Sports (2018-2019)\",WSC002;WSC013\nlinkedin.com/in/priya-anand-cv,Priya Anand,VidStream,Senior Computer Vision Engineer,Tel Aviv IL,7,\"Python;OpenCV;YOLO;Real-time Processing;AWS;Deep Learning\",Video Technology,\"Mobileye;Intel\",\"Computer Vision Engineer at Mobileye (2019-2021);CV Research Intern at Intel (2017-2018)\",WSC002;WSC011\nlinkedin.com/in/carlos-mendez-ds,Carlos Mendez,HealthData Inc,Data Scientist,Madrid ES,4,\"Python;Scikit-learn;SQL;Tableau;Healthcare Analytics\",Healthcare,\"Hospital group;freelance\",\"Junior Data Analyst at Hospital Group (2021-2022);Research Assistant at UAM (2019-2021)\",\nlinkedin.com/in/emily-carter-video,Emily Carter,BroadcastAI,Video AI Engineer,London UK,8,\"Python;Computer Vision;FFmpeg;Video Encoding;AWS;Docker\",Broadcast Media,\"BBC R&D;Ericsson\",\"Senior Research Engineer at BBC R&D (2019-2022);Video Systems Engineer at Ericsson (2016-2019)\",WSC001;WSC013\nlinkedin.com/in/tom-nguyen-fin,Tom Nguyen,FinanceFlow,Senior Software Engineer,Singapore SG,6,\"Java;Spring Boot;Microservices;Kafka;SQL\",Financial Services,\"DBS Bank;Grab\",\"Backend Engineer at DBS Bank (2021-2023);Software Engineer at Grab (2018-2021)\",\nlinkedin.com/in/amir-hassan-sports,Amir Hassan,SportStats,Sports Data Engineer,Amsterdam NL,5,\"Python;Spark;dbt;SQL;Airflow;Sports Data\",Sports Technology,\"FIFA;Genius Sports\",\"Data Engineer at FIFA (2021-2022);Data Analyst at Genius Sports (2019-2021)\",WSC004;WSC008\nlinkedin.com/in/rachel-kim-be,Rachel Kim,MediaPipe Co,Backend Engineer,Seoul KR,4,\"Go;Python;REST APIs;Kafka;Docker\",Media Technology,\"Naver;Kakao\",\"Software Engineer at Naver (2021-2023);Junior Developer at Kakao (2019-2021)\",WSC006\nlinkedin.com/in/daniel-brown-pm,Daniel Brown,RealEstateX,Product Manager,Austin TX,6,\"Product Management;Agile;Roadmapping;B2C\",Real Estate,\"Zillow;startup\",\"Associate PM at Zillow (2020-2022);Product Analyst at startup (2018-2020)\",\nlinkedin.com/in/sophie-martin-ott,Sophie Martin,StreamOTT,Senior Platform Engineer,Paris FR,7,\"Python;Go;Kubernetes;AWS;Live Streaming;CDN;Sports\",OTT Streaming,\"Canal+;Akamai\",\"Platform Engineer at Akamai (2019-2022);Backend Engineer at Canal+ (2016-2019)\",WSC001;WSC006\nlinkedin.com/in/ben-walker-retail,Ben Walker,RetailTech,Software Engineer,Chicago IL,3,\"JavaScript;Node.js;React;SQL\",Retail Technology,\"Target;startup\",\"Junior Developer at Target Corp (2022-2023);Intern at startup (2021-2022)\",\nlinkedin.com/in/yuki-tanaka-nba,Yuki Tanaka,NBA,Data Engineer,New York US,6,\"Python;Spark;dbt;Airflow;SQL;Sports Analytics;AWS\",Sports - Professional League,\"Sportradar;Nielsen Sports\",\"Data Analyst at Nielsen Sports (2020-2022);Junior Data Engineer at Sportradar (2018-2020)\",WSC004\nlinkedin.com/in/laura-gibson-health,Laura Gibson,City Hospital Group,IT Manager,Manchester UK,10,\"IT Management;ITIL;Network;Healthcare IT\",Healthcare,\"NHS;private clinic\",\"IT Operations Lead at NHS Digital (2017-2021);Systems Administrator at private clinic (2013-2017)\",\nlinkedin.com/in/marcus-reid-ml,Marcus Reid,Stats Perform,ML Research Engineer,Chicago US,6,\"Python;PyTorch;Deep Learning;Event Detection;Sports CV;Research\",Sports Technology,\"Opta Sports;university research lab\",\"ML Engineer at Opta Sports (2019-2022);Research Intern at Northwestern CV Lab (2018-2019)\",WSC002;WSC013;WSC011\nlinkedin.com/in/anna-petrov-gov,Anna Petrov,GovTech Agency,Software Developer,Warsaw PL,3,\"Java;Spring;SQL;Government Systems\",Government Technology,\"public sector\",\"Junior Developer at Polish Ministry of Finance (2022-2023);IT Intern at public sector (2021-2022)\",\nlinkedin.com/in/chris-lee-sportradar,Chris Lee,Sportradar,Senior Backend Engineer,Vienna AT,8,\"Python;Go;Kafka;Microservices;REST APIs;Sports Data Feeds\",Sports Technology,\"Betgenius;startup\",\"Backend Engineer at Sportradar (2016-2020 then rejoined 2022);Software Engineer at Betgenius (2014-2016)\",WSC006;WSC014\nlinkedin.com/in/jennifer-adams-ins,Jennifer Adams,InsureTech,Data Analyst,Dallas TX,4,\"Excel;SQL;Tableau;Insurance Analytics\",Insurance,\"Allstate;startup\",\"Junior Analyst at Allstate (2021-2023);Reporting Intern at startup (2019-2021)\",\nlinkedin.com/in/ryan-patel-dazn,Ryan Patel,DAZN,Senior Data Engineer,London UK,7,\"Python;Spark;Kafka;dbt;Airflow;AWS;Real-time Sports Data\",Sports Streaming,\"BT Sport;Sky\",\"Data Engineer at BT Sport (2019-2021);Data Analyst at Sky (2017-2019)\",WSC004;WSC008;WSC001\nlinkedin.com/in/olivia-scott-mktg,Olivia Scott,MarketingCo,Digital Marketing Manager,Toronto CA,5,\"SEO;Google Ads;HubSpot;Content Marketing;Social Media\",Marketing,\"agency;startup\",\"Senior Marketing Exec at agency (2021-2023);Content Manager at startup (2019-2021)\",\nlinkedin.com/in/nathan-brooks-cv,Nathan Brooks,Second Spectrum,Computer Vision Engineer,Los Angeles US,5,\"Python;PyTorch;Computer Vision;Pose Estimation;Sports Tracking\",Sports Technology,\"university;startup\",\"CV Research Engineer at USC (2021-2022);CV Intern at startup (2019-2021)\",WSC002\nlinkedin.com/in/zoe-wright-legal,Zoe Wright,LegalTech,Software Engineer,Dublin IE,3,\"JavaScript;React;Node.js;PostgreSQL\",Legal Technology,\"law firm;startup\",\"Junior Developer at Dublin law firm IT dept (2022-2023);Web Developer at startup (2021-2022)\",\nlinkedin.com/in/alex-turner-olym,Alex Turner,Olympic Channel,Product Manager - Data,Lausanne CH,8,\"Product Management;Sports Broadcasting;Data Products;OTT;APIs;Stakeholder Management\",Sports Media,\"Eurovision;IOC digital\",\"Senior PM at Eurovision Sport (2019-2022);Product Manager at IOC Digital (2016-2019)\",WSC003;WSC012\nlinkedin.com/in/isabella-moore-edu,Isabella Moore,EduTech,Backend Developer,Melbourne AU,3,\"Python;Django;PostgreSQL;AWS\",\"Education Technology\",\"university;startup\",\"Junior Backend Dev at university (2022-2023);Intern at startup (2021-2022)\",\nlinkedin.com/in/ethan-clark-aws,Ethan Clark,Amazon Web Services,Solutions Architect - Media,Seattle US,9,\"AWS;Media Services;Architecture;Sports Clients;Streaming;IaC\",Cloud/Media,\"ESPN;startup\",\"Solutions Architect at ESPN Technology (2018-2021);Cloud Engineer at startup (2015-2018)\",WSC009;WSC001\nlinkedin.com/in/mia-johnson-food,Mia Johnson,FoodTech,Data Engineer,Copenhagen DK,4,\"Python;SQL;dbt;Airflow;Food Supply Chain\",Food Technology,\"food startup;retailer\",\"Data Analyst at food startup (2021-2023);BI Analyst at retailer (2019-2021)\",\nlinkedin.com/in/lucas-evans-img,Lucas Evans,IMG Media,Senior ML Engineer,London UK,8,\"Python;PyTorch;Computer Vision;Video Understanding;Sports Highlights;AWS\",Sports Media,\"ITV Digital;Oxford Research Lab\",\"ML Engineer at ITV Digital (2019-2022);Research Engineer at Oxford CV Lab (2016-2019)\",WSC002;WSC011;WSC013\nlinkedin.com/in/grace-wilson-cyber,Grace Wilson,CyberShield,DevOps Engineer,Tel Aviv IL,5,\"Kubernetes;Terraform;CI/CD;AWS;Security\",Cybersecurity,\"IDF tech unit;startup\",\"DevOps Engineer at IDF Intelligence Unit (2020-2022);Junior SRE at startup (2019-2020)\",\nlinkedin.com/in/jack-thomas-sport,Jack Thomas,Performance Lab,Sports Science Data Analyst,Manchester UK,4,\"Python;R;Sports Science;Wearables;Performance Analytics\",Sports Science,\"Premier League club;university\",\"Performance Analyst at Premier League club (2021-2023);Research Asst at Manchester Met (2019-2021)\",WSC008\nlinkedin.com/in/chloe-martinez-bank,Chloe Martinez,National Bank,Software Engineer,Mexico City MX,4,\"Java;Spring Boot;SQL;Banking Systems\",Banking,\"fintech;startup\",\"Junior Developer at fintech (2021-2023);Intern at startup (2020-2021)\",\nlinkedin.com/in/noah-anderson-gs,Noah Anderson,Genius Sports,Data Platform Engineer,London UK,6,\"Python;Spark;Kafka;Airflow;dbt;Sports Data;AWS\",Sports Technology,\"Betfair;betting startup\",\"Data Engineer at Betfair (2020-2022);Analytics Engineer at betting startup (2018-2020)\",WSC004;WSC006\nlinkedin.com/in/lily-thompson-pharma,Lily Thompson,PharmaTech,Data Scientist,Basel CH,5,\"Python;R;Statistics;Clinical Trials;Pharma Analytics\",Pharmaceutical,\"Novartis;university\",\"Data Analyst at Novartis (2021-2023);Research Intern at Basel University (2019-2021)\",\nlinkedin.com/in/owen-jackson-fox,Owen Jackson,Fox Sports Digital,Backend Engineer,Los Angeles US,6,\"Python;Go;AWS;Kafka;Live Streaming;CDN;Sports Infrastructure\",Sports Media,\"Turner Sports;startup\",\"Backend Engineer at Turner Sports (2020-2022);Software Engineer at startup (2018-2020)\",WSC006;WSC009\nlinkedin.com/in/aria-white-logi,Aria White,LogiCo,Software Engineer,Rotterdam NL,3,\"Java;Microservices;SQL;Supply Chain\",Logistics,\"shipping startup;freelance\",\"Junior Developer at shipping startup (2022-2023);Freelance developer (2021-2022)\",\nlinkedin.com/in/liam-harris-kinexon,Liam Harris,KINEXON Sports,Senior Backend Engineer,Munich DE,7,\"Python;Go;IoT;Real-time Processing;Kafka;WebSockets;Sports\",Sports IoT/Tech,\"Siemens;startup\",\"Backend Engineer at KINEXON Sports (2018-present);Software Engineer at Siemens (2016-2018)\",WSC006;WSC014\nlinkedin.com/in/emma-lewis-agri,Emma Lewis,AgriTech,Product Manager,Cape Town ZA,5,\"Product Management;Agile;B2B SaaS;Agriculture\",Agriculture Technology,\"farming startup;NGO\",\"Associate PM at farming startup (2021-2023);Project Manager at NGO (2019-2021)\",\nlinkedin.com/in/mason-young-sky,Mason Young,Sky Sports,ML Engineer,London UK,5,\"Python;TensorFlow;Computer Vision;Highlight Detection;Sports Video\",Sports Broadcasting,\"ITV Digital;BBC\",\"ML Engineer at Sky Sports (2019-present);Data Science Intern at ITV Digital (2018-2019)\",WSC002;WSC013\nlinkedin.com/in/charlotte-hall-tel,Charlotte Hall,TelecomNet,Network Engineer,Stockholm SE,6,\"Cisco;Network Architecture;5G;VoIP\",Telecommunications,\"Ericsson;Telia\",\"Network Engineer at Ericsson (2020-2022);Junior Network Admin at Telia (2018-2020)\",\nlinkedin.com/in/elijah-allen-deltatre,Elijah Allen,Deltatre,Senior Product Manager,Milan IT,9,\"Product Management;OTT;Sports Digital;B2B SaaS;Broadcast APIs;CMS\",Sports Media Technology,\"Sky Italia;startup\",\"Product Manager at Deltatre (2019-present);Product Lead at Sky Italia (2016-2019)\",WSC003;WSC012;WSC011\nlinkedin.com/in/amelia-king-pet,Amelia King,PetTech,Data Analyst,Orlando FL,3,\"Excel;SQL;Python basics;Pet Industry\",Consumer Tech,\"retail;startup\",\"Junior Analyst at pet retail chain (2022-2023);Intern at startup (2021-2022)\",\nlinkedin.com/in/henry-wright-wm,Henry Wright,Warner Media Sports,Data Engineer,Atlanta US,6,\"Python;Spark;dbt;SQL;Airflow;Sports Broadcasting;AWS\",Sports Media,\"CNN;Turner\",\"Data Engineer at CNN Digital (2020-2022);Analytics Engineer at Turner Broadcasting (2018-2020)\",WSC004;WSC001\nlinkedin.com/in/scarlett-green-nfl,Scarlett Green,NFL,Senior Data Engineer,New York US,8,\"Python;Spark;dbt;Airflow;AWS;Sports Analytics;Kafka;Real-time\",Professional Sports League,\"Nielsen Sports;startup\",\"Data Engineer at Nielsen Sports (2019-2022);Analytics Engineer at startup (2016-2019)\",WSC004;WSC008;WSC013\nlinkedin.com/in/viktor-novak-de,Viktor Novak,Databricks,Senior Data Engineer,Amsterdam NL,7,\"Python;Spark;Delta Lake;dbt;Airflow;AWS;Kafka\",Data & AI Platforms,\"Booking.com;startup\",\"Data Engineer at Booking.com (2020-2022);Analytics Engineer at startup (2018-2020)\",\nlinkedin.com/in/fatima-alrashid-data,Fatima Al-Rashid,Sporting Analytics Group,Head of Data,Dubai UAE,9,\"Python;Spark;SQL;Sports Analytics;Team Management;dbt\",Sports Analytics,\"LaLiga Tech;PFA\",\"Senior Data Engineer at LaLiga Tech (2018-2022);Data Analyst at PFA (2016-2018)\",WSC004;WSC008\nlinkedin.com/in/george-patterson-cloud,George Patterson,CloudRetail,Data Platform Engineer,Dublin IE,5,\"Python;dbt;Snowflake;Airflow;SQL\",Retail Technology,\"Accenture;startup\",\"Data Analyst at Accenture (2021-2023);BI Developer at startup (2019-2021)\",\nlinkedin.com/in/sara-lindqvist-ml,Sara Lindqvist,Viaplay,Senior ML Engineer,Stockholm SE,8,\"Python;PyTorch;Recommendation Systems;Streaming;Sports;AWS\",Sports Streaming,\"Spotify;KTH Research\",\"ML Engineer at Spotify (2019-2022);Research Engineer at KTH (2017-2019)\",WSC002\nlinkedin.com/in/marcus-webb-pharma,Marcus Webb,PharmaAnalytics,Data Engineer,London UK,4,\"Python;SQL;dbt;Airflow;Healthcare Data\",Pharmaceutical,\"GSK;startup\",\"Data Engineer at GSK (2021-2023);Analyst at startup (2019-2021)\",\nlinkedin.com/in/jin-park-stats,Jin Park,Stats Perform,Principal Data Scientist,Chicago US,10,\"Python;PyTorch;Causal ML;Event Detection;Football Analytics;Research\",Sports Technology,\"Opta;Carnegie Mellon University\",\"Senior Data Scientist at Opta (2017-2022);Postdoc at CMU (2015-2017)\",WSC013;WSC008\nlinkedin.com/in/katarzyna-wojcik-ins,Katarzyna Wojcik,InsuranceGroup PL,Analytics Engineer,Warsaw PL,4,\"SQL;dbt;Python;Tableau;Insurance\",Insurance,\"PZU;startup\",\"Analytics Analyst at PZU (2021-2023);BI Intern at startup (2019-2021)\",\nlinkedin.com/in/bruno-ferreira-benfica,Bruno Ferreira,Benfica Lab,Sports Data Scientist,Lisbon PT,5,\"Python;R;Machine Learning;Football Analytics;Computer Vision;Wearables\",Sports Science & Analytics,\"FC Porto;university\",\"Data Scientist at FC Porto (2021-2022);Research Asst at Univ of Porto (2019-2021)\",WSC008\nlinkedin.com/in/ingrid-svensson-klarna,Ingrid Svensson,Klarna,Data Engineer,Stockholm SE,5,\"Python;Spark;dbt;Kafka;SQL;Fintech Data\",Financial Services,\"H&M Group;startup\",\"Data Engineer at H&M Group (2021-2023);Analyst at startup (2019-2021)\",\nlinkedin.com/in/tobias-braun-aws,Tobias Braun,Amazon Web Services,ML Solutions Architect,Berlin DE,8,\"AWS;SageMaker;ML Architecture;Sports Media;IaC;Python\",Cloud/Media,\"Sky Deutschland;Bertelsmann\",\"Solutions Architect at Sky Deutschland (2019-2022);Senior Engineer at Bertelsmann (2016-2019)\",WSC001;WSC009\nlinkedin.com/in/adaora-okafor-tech,Adaora Okafor,MediaSports Africa,Head of Technology,Lagos NG,10,\"Python;Computer Vision;Video Analytics;Team Leadership;AWS;Sports\",Sports Media,\"SuperSport;startup\",\"CTO at startup (2020-2022);Senior Engineer at SuperSport (2017-2020)\",WSC011\nlinkedin.com/in/pavel-horak-gov,Pavel Horak,GovData CZ,Data Analyst,Prague CZ,3,\"SQL;Excel;Tableau;Government Reporting\",Government Technology,\"Czech Statistics Office;public sector\",\"Analyst at Czech Statistics Office (2022-2023);Intern at public sector (2021-2022)\",\nlinkedin.com/in/tom-barker-akamai,Tom Barker,Akamai Technologies,Senior DevOps Engineer,London UK,8,\"Kubernetes;Terraform;AWS;CDN;CI/CD;Python;Streaming\",Cloud/CDN,\"Fastly;startup\",\"DevOps Engineer at Fastly (2018-2021);Platform Engineer at startup (2016-2018)\",WSC009\nlinkedin.com/in/mei-zhang-platform,Mei Zhang,CloudNative Labs,Platform Engineer,Singapore SG,4,\"Kubernetes;Helm;Terraform;GCP;CI/CD\",Cloud Technology,\"Grab;startup\",\"Platform Engineer at Grab (2021-2023);DevOps Intern at startup (2019-2021)\",\nlinkedin.com/in/rafa-torres-sre,Rafa Torres,Sportradar,Site Reliability Engineer,Barcelona ES,6,\"Python;Kubernetes;Terraform;AWS;Monitoring;Sports Data\",Sports Technology,\"LaLiga Tech;startup\",\"SRE at LaLiga Tech (2020-2022);DevOps Engineer at startup (2018-2020)\",WSC006;WSC009\nlinkedin.com/in/kim-soojin-devops,Kim Soo-Jin,Samsung SDS,DevOps Lead,Seoul KR,7,\"Kubernetes;Jenkins;AWS;CI/CD;Infrastructure\",Technology,\"LG CNS;startup\",\"DevOps Engineer at LG CNS (2019-2022);SRE at startup (2017-2019)\",\nlinkedin.com/in/alexei-volkov-dazn,Alexei Volkov,DAZN,Infrastructure Engineer,London UK,6,\"Kubernetes;AWS;Terraform;Live Streaming;CDN;Sports\",Sports Streaming,\"BT Sport;startup\",\"Platform Engineer at BT Sport (2020-2022);Cloud Engineer at startup (2018-2020)\",WSC009;WSC001\nlinkedin.com/in/nadia-osei-cloud,Nadia Osei,HealthCloud,Cloud Engineer,Accra GH,3,\"AWS;Azure;Terraform;CI/CD;Healthcare\",Healthcare Technology,\"MTN;startup\",\"Cloud Engineer at MTN (2022-2023);IT Intern at startup (2021-2022)\",\nlinkedin.com/in/david-petersen-sre,David Petersen,Warner Media,Senior SRE,Atlanta US,7,\"Python;Kubernetes;AWS;Monitoring;Sports Broadcast;Reliability\",Broadcast Media,\"ESPN;Turner Sports\",\"SRE at Turner Sports (2019-2022);Platform Engineer at ESPN (2017-2019)\",WSC009;WSC001\nlinkedin.com/in/hana-blum-agtech,Hana Blum,AgTech Berlin,DevOps Engineer,Berlin DE,3,\"Kubernetes;Terraform;CI/CD;AWS;Agriculture Tech\",Agriculture Technology,\"Bayer Digital;startup\",\"Junior DevOps at Bayer Digital (2022-2023);Intern at startup (2021-2022)\",\nlinkedin.com/in/stefano-conti-sky,Stefano Conti,Sky Italia,Platform Architect,Milan IT,10,\"AWS;Kubernetes;CDN;Terraform;Live Sports Streaming;Architecture\",Sports Broadcasting,\"RAI;TIM\",\"Platform Architect at Sky Italia (2018-present);Senior Engineer at RAI (2014-2018)\",WSC009;WSC011\nlinkedin.com/in/jerome-blanc-canal,Jerome Blanc,Canal+,Senior Infrastructure Engineer,Paris FR,8,\"AWS;Kubernetes;CDN;Terraform;Live Sport;Streaming\",Sports Broadcasting,\"Orange;startup\",\"Infrastructure Engineer at Canal+ (2019-present);Senior SRE at Orange (2016-2019)\",WSC009\nlinkedin.com/in/amara-diallo-telecom,Amara Diallo,TelecomSN,Network Engineer,Dakar SN,4,\"Cisco;MPLS;LTE;Network Design\",Telecommunications,\"Sonatel;startup\",\"Network Engineer at Sonatel (2021-2023);Intern at startup (2020-2021)\",\nlinkedin.com/in/pilar-reyes-ott,Pilar Reyes,OTT Latam,Video Streaming Engineer,Buenos Aires AR,6,\"Python;FFmpeg;HLS;AWS;Live Streaming;Video Encoding;Sports\",OTT/Sports Broadcasting,\"Claro Video;startup\",\"Video Engineer at Claro Video (2020-2022);Backend Dev at startup (2018-2020)\",WSC006;WSC001\nlinkedin.com/in/sven-hartmann-arri,Sven Hartmann,ARRI,Camera Systems Engineer,Munich DE,8,\"Camera Systems;Hardware;Broadcast Equipment;Sports Production\",Broadcast Equipment,\"Sony Professional;startup\",\"Senior Systems Engineer at Sony Professional (2018-2022);Engineer at startup (2016-2018)\",\nlinkedin.com/in/nia-campbell-bbc,Nia Campbell,BBC Sport,Senior Video Engineer,London UK,7,\"Python;FFmpeg;Video Processing;AWS;Live Sports;Highlight Clipping\",Broadcast Media,\"Channel 4;ITV\",\"Senior Video Engineer at Channel 4 (2020-2022);Video Engineer at ITV (2018-2020)\",WSC001;WSC013\nlinkedin.com/in/javier-morales-tv,Javier Morales,TeleDeporte,Broadcast Engineer,Madrid ES,5,\"Broadcast Systems;EVS;Video Encoding;Sports Production\",Broadcasting,\"RTVE;startup\",\"Broadcast Engineer at RTVE (2021-2023);Tech Intern at startup (2019-2021)\",\nlinkedin.com/in/chiara-russo-video,Chiara Russo,Mediaset,Senior ML Engineer - Video,Milan IT,7,\"Python;PyTorch;Computer Vision;Video Captioning;Sports Highlights;AWS\",Broadcast Media,\"Sky Italia;RAI\",\"ML Engineer at Sky Italia (2020-2022);Computer Vision Researcher at RAI (2018-2020)\",WSC002;WSC013\nlinkedin.com/in/lars-andersen-ericsson,Lars Andersen,Ericsson,Solutions Architect - Broadcast,Stockholm SE,11,\"5G Broadcast;AWS;CDN;Live Sports;Architecture;Streaming\",Broadcast Technology,\"Telia;Nokia\",\"Solutions Architect at Ericsson (2018-present);Senior Network Architect at Telia (2014-2018)\",WSC009\nlinkedin.com/in/yael-bendavid-akamai,Yael Ben-David,Akamai Technologies,Media Delivery Engineer,Tel Aviv IL,5,\"CDN;AWS;Live Streaming;Sports;Python;Performance\",Cloud/CDN,\"Cloudflare;IDF tech unit\",\"Media Delivery Engineer at Cloudflare (2021-2022);Network Engineer at IDF (2018-2021)\",WSC009;WSC001\nlinkedin.com/in/patrick-duval-textile,Patrick Duval,TextileInd,IT Engineer,Lyon FR,6,\"IT Support;Windows Server;SQL;ERP\",Textile Manufacturing,\"factory group;startup\",\"IT Manager at factory group (2020-2023);IT Support at startup (2018-2020)\",\nlinkedin.com/in/marta-kowalska-img,Marta Kowalska,IMG Media,Video Systems Engineer,Warsaw PL,6,\"Python;FFmpeg;HLS;DASH;Multi-camera;Sports Rights\",Sports Media,\"TVN;startup\",\"Video Engineer at TVN (2020-2022);Junior Developer at startup (2018-2020)\",WSC001;WSC006\nlinkedin.com/in/felix-obi-health,Felix Obi,HealthStream,Software Engineer,Lagos NG,3,\"JavaScript;React;Node.js;Healthcare\",Healthcare Technology,\"fintech startup;freelance\",\"Junior Dev at fintech startup (2022-2023);Freelance (2020-2022)\",\nlinkedin.com/in/claudia-vogel-eurosport,Claudia Vogel,Eurosport Germany,Product Manager - Streaming,Berlin DE,8,\"Product Management;OTT;Sports Rights;B2C Streaming;Analytics\",Sports Broadcasting,\"Sky Deutschland;startup\",\"Senior PM at Sky Deutschland (2019-2022);Product Manager at startup (2016-2019)\",WSC003;WSC012\nlinkedin.com/in/david-strauss-nba,David Strauss,NBA,Senior Video Platform Engineer,New York US,9,\"Python;AWS;Video Streaming;HLS;CDN;Kubernetes;Sports\",Sports - Professional League,\"Akamai;ESPN\",\"Senior Engineer at Akamai Media (2017-2021);Video Engineer at ESPN (2015-2017)\",WSC001;WSC009\n","jobs":"job_id,title,department,seniority,key_domains,required_skills,nice_to_have\nJOB001,Senior ML Engineer,AI/ML,Senior,\"Sports Video Analysis;Computer Vision;Deep Learning\",\"Python;PyTorch;Computer Vision;Object Detection;AWS\",\"Sports Analytics;Real-time processing;Docker\"\nJOB002,Backend Engineer,Engineering,Mid-Senior,\"Video Processing;Distributed Systems;APIs\",\"Python;Go;Kafka;AWS;Microservices;REST APIs\",\"FFmpeg;Video streaming;Redis\"\nJOB003,Senior Product Manager - Sports Data,Product,Senior,\"Sports Technology;B2B SaaS;Data Products\",\"Product Management;Sports Analytics;API Products;Stakeholder Management\",\"OTT platforms;Broadcast tech;SQL\"\nJOB004,Data Engineer,Data,Mid,\"Sports Data Pipeline;Cloud Infrastructure\",\"Python;Spark;dbt;SQL;AWS;Airflow\",\"Sports domain knowledge;Kafka;Terraform\"\n","employees":"employee_id,full_name,title,department,linkedin_id,work_history\nWSC001,David Cohen,VP Engineering,Engineering,david-cohen-wsc,\"Akamai Technologies (2016-2020);Check Point Software (2013-2016);IDF Intelligence Unit (2009-2013)\"\nWSC002,Maya Levi,Senior ML Engineer,AI/ML,maya-levi-ml,\"Mobileye (2018-2021);Intel Computer Vision Lab (2016-2018);BGU Research Assistant (2014-2016)\"\nWSC003,Noa Shapiro,Senior Product Manager,Product,noa-shapiro-pm,\"Comverse (2016-2019);Amdocs (2013-2016);startup (2011-2013)\"\nWSC004,Avi Goldberg,Data Engineer,Data,avi-goldberg-data,\"Nielsen Sports (2019-2022);Walla Sports (2017-2019);freelance (2015-2017)\"\nWSC005,Sarah Klein,Talent Acquisition Manager,HR,sarah-klein-hr,\"ManpowerGroup (2018-2021);Adecco (2015-2018)\"\nWSC006,Tal Mizrahi,Backend Engineer,Engineering,tal-mizrahi-be,\"Sportradar (2017-2020);IronSource (2015-2017);startup (2013-2015)\"\nWSC007,Roni Bar,Frontend Engineer,Engineering,roni-bar-fe,\"Wix (2019-2022);monday.com (2017-2019);startup (2015-2017)\"\nWSC008,Liron Katz,Sports Data Analyst,Data,liron-katz-sports,\"Stats Perform / Opta (2018-2021);Nielsen Sports (2016-2018);freelance sports analyst (2014-2016)\"\nWSC009,Yuval Stern,DevOps Engineer,Engineering,yuval-stern-devops,\"Akamai Technologies (2017-2020);Radware (2015-2017);IDF (2012-2015)\"\nWSC010,Hila Peled,UX Designer,Product,hila-peled-ux,\"monday.com (2018-2021);Fiverr (2016-2018);freelance (2014-2016)\"\nWSC011,Eran Moshe,CTO,Leadership,eran-moshe-cto,\"Comverse (2014-2018);RAD Data Communications (2010-2014);Motorola (2006-2010)\"\nWSC012,Dana Friedman,Sales Engineer,Sales,dana-friedman-se,\"Deltatre (2019-2022);Amdocs (2016-2019);startup (2014-2016)\"\nWSC013,Itai Nahum,ML Research Engineer,AI/ML,itai-nahum-ml,\"Opta Sports (2018-2021);BGU Computer Vision Lab (2016-2018);IDF (2013-2016)\"\nWSC014,Michal Barak,Backend Engineer,Engineering,michal-barak-be,\"KINEXON Sports (2018-2021);Cellebrite (2016-2018);startup (2014-2016)\"\nWSC015,Omer Levy,Sports Content Analyst,Content,omer-levy-content,\"Sky Sports Digital (2017-2020);BBC Sport Online (2015-2017);freelance (2013-2015)\"\n","taxonomy":{"_readme":"Per requirement: full = equivalent term (credit 1), partial = related term (credit 0.5), exclude = sounds similar but does not count. 'skills' are matched exactly against top_skills (case-insensitive). 'text' terms are matched as substrings in the fields named.","JOB001":{"required":{"Python":{"full":["Python"],"partial":["Python basics"],"exclude":[]},"PyTorch":{"full":["PyTorch"],"partial":["TensorFlow","Deep Learning"],"exclude":[]},"Computer Vision":{"full":["Computer Vision","Sports CV"],"partial":["OpenCV","YOLO","Pose Estimation","Video Understanding","Highlight Detection","Video Analytics","Video Captioning"],"exclude":["Video Encoding","FFmpeg"],"text_full":{"title":["computer vision"]}},"Object Detection":{"full":["YOLO"],"partial":["Sports Tracking","Pose Estimation"],"exclude":["Event Detection"],"text_partial":{"notes":["tracking"]}},"AWS":{"full":["AWS"],"partial":["SageMaker","GCP","Azure"],"exclude":[]}},"domains":{"Sports Video Analysis":{"full":["Sports Highlights","Sports Video","Highlight Detection","Highlight Clipping","Sports Tracking","Sports CV"],"partial":["Video Analytics","Video Understanding","Sports Analytics","Football Analytics","Sports"],"exclude":["Video Encoding"],"text_full":{"notes":["highlight","sports clipping"]}},"Computer Vision":{"full":["Computer Vision","Sports CV"],"partial":["OpenCV","YOLO","Pose Estimation","Video Understanding","Highlight Detection","Video Analytics","Video Captioning"],"exclude":[],"text_full":{"title":["computer vision"]}},"Deep Learning":{"full":["Deep Learning","PyTorch","TensorFlow"],"partial":["Machine Learning","Causal ML","Recommendation Systems"],"exclude":[]}},"nice_to_have":{"Sports Analytics":{"full":["Sports Analytics","Football Analytics","Performance Analytics"],"partial":["Sports Data","Sports Science","Sports"],"exclude":[]},"Real-time processing":{"full":["Real-time Processing","Real-time","Real-time Sports Data"],"partial":["Kafka","Live Streaming","WebSockets"],"exclude":[],"text_full":{"notes":["real-time"]}},"Docker":{"full":["Docker"],"partial":["Kubernetes","Helm"],"exclude":[]}}},"JOB002":{"required":{"Python":{"full":["Python"],"partial":["Python basics"],"exclude":[]},"Go":{"full":["Go"],"partial":[],"exclude":[]},"Kafka":{"full":["Kafka"],"partial":["Real-time Sports Data"],"exclude":[]},"AWS":{"full":["AWS"],"partial":["SageMaker","GCP","Azure"],"exclude":[]},"Microservices":{"full":["Microservices"],"partial":["Spring Boot","Docker","Kubernetes"],"exclude":[]},"REST APIs":{"full":["REST APIs"],"partial":["APIs","Broadcast APIs","Django","Node.js","Spring Boot","Spring"],"exclude":[]}},"domains":{"Video Processing":{"full":["Video Processing","FFmpeg","Video Encoding"],"partial":["HLS","DASH","Video Streaming","Live Streaming","Multi-camera"],"exclude":[]},"Distributed Systems":{"full":["Kafka","Microservices"],"partial":["Spark","Kubernetes","CDN"],"exclude":[]},"APIs":{"full":["REST APIs","APIs","Broadcast APIs"],"partial":["Microservices","Sports Data Feeds","WebSockets"],"exclude":[]}},"nice_to_have":{"FFmpeg":{"full":["FFmpeg"],"partial":["Video Encoding","Video Processing"],"exclude":[]},"Video streaming":{"full":["Video Streaming","Live Streaming","Streaming","HLS","DASH","Live Sports Streaming"],"partial":["CDN","OTT"],"exclude":[]},"Redis":{"full":["Redis"],"partial":[],"exclude":[]}}},"JOB003":{"required":{"Product Management":{"full":["Product Management"],"partial":["Roadmapping","Agile"],"exclude":[],"text_full":{"title":["product manager"]}},"Sports Analytics":{"full":["Sports Analytics","Football Analytics"],"partial":["Analytics","Sports Digital","Sports Broadcasting","Sports Rights","Sports"],"exclude":["Insurance Analytics","Healthcare Analytics","Pharma Analytics"]},"API Products":{"full":["APIs","Broadcast APIs"],"partial":["Data Products","CMS"],"exclude":["REST APIs"]},"Stakeholder Management":{"full":["Stakeholder Management"],"partial":["Team Management","Team Leadership"],"exclude":[]}},"domains":{"Sports Technology":{"full":[],"partial":["Sports","Sports Digital","Sports Rights","Sports Broadcasting","OTT"],"exclude":[],"text_full":{"industry":["sports"]}},"B2B SaaS":{"full":["B2B SaaS"],"partial":["Broadcast APIs","CMS"],"exclude":["B2C","B2C Streaming"]},"Data Products":{"full":["Data Products"],"partial":["Analytics","APIs","Sports Analytics"],"exclude":[]}},"nice_to_have":{"OTT platforms":{"full":["OTT"],"partial":["Streaming","B2C Streaming"],"exclude":[]},"Broadcast tech":{"full":["Sports Broadcasting","Broadcast APIs","Broadcast Systems"],"partial":["Sports Rights","CMS"],"exclude":[],"text_full":{"industry":["broadcast"]}},"SQL":{"full":["SQL"],"partial":[],"exclude":[]}}},"JOB004":{"required":{"Python":{"full":["Python"],"partial":["Python basics"],"exclude":[]},"Spark":{"full":["Spark"],"partial":["Delta Lake"],"exclude":[]},"dbt":{"full":["dbt"],"partial":[],"exclude":[]},"SQL":{"full":["SQL"],"partial":["PostgreSQL","Snowflake","dbt"],"exclude":[]},"AWS":{"full":["AWS"],"partial":["SageMaker","GCP","Azure"],"exclude":[]},"Airflow":{"full":["Airflow"],"partial":[],"exclude":[]}},"domains":{"Sports Data Pipeline":{"full":["Sports Data","Real-time Sports Data","Sports Data Feeds"],"partial":["Sports Analytics","Sports Broadcasting","Sports"],"exclude":[]},"Cloud Infrastructure":{"full":["AWS","GCP","Azure"],"partial":["Terraform","Kubernetes","IaC","Snowflake"],"exclude":[]}},"nice_to_have":{"Sports domain knowledge":{"full":[],"partial":["Sports","Sports Analytics","Sports Data"],"exclude":[],"text_full":{"industry":["sports"]}},"Kafka":{"full":["Kafka"],"partial":["Real-time Sports Data"],"exclude":[]},"Terraform":{"full":["Terraform"],"partial":["IaC"],"exclude":[]}}}},"config":{"_readme":"Every number in this file is a documented starting assumption, not a calibrated value. Change it here; no code change is needed.","weights":{"required":60,"domains":25,"role_family":5,"seniority":5,"nice_to_have":5},"credit":{"full":1,"partial":0.5,"none":0},"shortlist_rule":{"min_required_coverage":0.5,"min_domain_credit":0.5},"band_width":3,"seniority":{"senior_title_terms":["senior","lead","principal","head","architect"],"Senior":{"full_years_without_title":null,"partial_years":7},"Mid-Senior":{"full_years":4,"partial_years":3},"Mid":{"full_years":3}},"role_family":{"JOB001":{"full":["ml engineer","ml research","machine learning","computer vision","video ai"],"partial":["data scientist","ml solutions"]},"JOB002":{"full":["backend"],"partial":["software engineer","software developer","platform engineer"]},"JOB003":{"full":["product manager"],"partial":["product lead","product analyst"]},"JOB004":{"full":["data engineer","data platform"],"partial":["analytics engineer","head of data"]}},"professional_domains":{"ML / AI":{"title":["ml ","ml-","machine learning","computer vision","data scientist","video ai"],"skills":["PyTorch","TensorFlow","Computer Vision","Deep Learning","Machine Learning","YOLO","OpenCV","Scikit-learn","SageMaker"]},"Data Engineering":{"title":["data engineer","data platform","analytics engineer","head of data"],"skills":["Spark","dbt","Airflow","Delta Lake","Snowflake"]},"Data Analytics":{"title":["data analyst","analyst"],"skills":["Tableau","Excel","Statistics"]},"Backend / Software":{"title":["backend","software engineer","software developer"],"skills":["Microservices","REST APIs","Spring Boot","Django","Node.js","Go"]},"DevOps / Platform":{"title":["devops","site reliability","sre","platform engineer","platform architect","infrastructure","cloud engineer"],"skills":["Kubernetes","Terraform","CI/CD","Helm","Jenkins","IaC"]},"Video / Broadcast Engineering":{"title":["video","broadcast","media delivery","camera","streaming"],"skills":["FFmpeg","HLS","DASH","Video Encoding","Video Processing","Broadcast Systems","EVS","Camera Systems"]},"Product":{"title":["product manager"],"skills":["Product Management","Roadmapping"]},"Solutions Architecture":{"title":["solutions architect"],"skills":["Architecture","ML Architecture"]},"IT / Networking":{"title":["it manager","it engineer","network engineer"],"skills":["Cisco","ITIL","IT Support","Network Design","Network Architecture","MPLS"]},"Marketing":{"title":["marketing"],"skills":["SEO","Google Ads","Content Marketing"]},"Technology Leadership":{"title":["head of technology","cto"],"skills":["Team Leadership"]},"Sales":{"title":["account executive","sales"],"skills":[]}},"conference_relevance":{"Sports Technology & Analytics":{"industry_terms":["sport","football"],"in_requires_industry":true,"in_domains":[],"adjacent_domains":["ML / AI","Data Engineering","Data Analytics","Video / Broadcast Engineering"]},"Data Engineering & AI/ML":{"industry_terms":[],"in_requires_industry":false,"in_domains":["ML / AI","Data Engineering"],"adjacent_domains":["Data Analytics","Backend / Software","Solutions Architecture","Technology Leadership"]},"DevOps & Platform Engineering":{"industry_terms":[],"in_requires_industry":false,"in_domains":["DevOps / Platform"],"adjacent_domains":["Backend / Software","Solutions Architecture"]},"Broadcast & Video Technology":{"industry_terms":["broadcast","streaming","ott","media","cdn"],"in_requires_industry":false,"in_domains":["Video / Broadcast Engineering"],"adjacent_domains":["ML / AI","Solutions Architecture","Product"],"industry_makes_adjacent":true}},"connections":{"company_stopwords":["sports","digital","technologies","tech","media","the","lab","online","group","inc","co"],"generic_employers":["startup","freelance","university","public sector","agency","retailer","retail","law firm","fintech","private clinic","hospital group"]}}};</script>
+<script>// CSV parsing and writing. No dependencies, handles quoted fields and embedded commas.
+(function (root, factory) {
+  if (typeof module === "object" && module.exports) module.exports = factory(require);
+  else { root.TalentOps = root.TalentOps || {}; Object.assign(root.TalentOps, factory(function () { return root.TalentOps; })); }
+})(typeof self !== "undefined" ? self : this, function (load) {
+  "use strict";
+  function parseCsv(text) {
+    const rows = []; let row = [], field = "", quoted = false;
+    const s = String(text).replace(/^﻿/, "");
+    for (let i = 0; i < s.length; i++) {
+      const c = s[i];
+      if (quoted) {
+        if (c === '"' && s[i + 1] === '"') { field += '"'; i++; }
+        else if (c === '"') quoted = false;
+        else field += c;
+      } else if (c === '"') quoted = true;
+      else if (c === ",") { row.push(field); field = ""; }
+      else if (c === "\n" || c === "\r") {
+        if (c === "\r" && s[i + 1] === "\n") i++;
+        row.push(field); field = "";
+        if (row.some((v) => v !== "")) rows.push(row);
+        row = [];
+      } else field += c;
+    }
+    if (field !== "" || row.length) { row.push(field); if (row.some((v) => v !== "")) rows.push(row); }
+    if (!rows.length) return [];
+    const header = rows[0].map((h) => h.trim());
+    return rows.slice(1).map((r) => Object.fromEntries(header.map((h, i) => [h, (r[i] || "").trim()])));
+  }
+  function toCsv(columns, records) {
+    const esc = (v) => { const t = v == null ? "" : String(v); return /[",\n\r]/.test(t) ? '"' + t.replace(/"/g, '""') + '"' : t; };
+    return [columns.join(",")].concat(records.map((r) => columns.map((c) => esc(r[c])).join(","))).join("\n") + "\n";
+  }
+  const splitList = (v) => String(v || "").split(";").map((x) => x.trim()).filter(Boolean);
+  return { parseCsv, toCsv, splitList };
+});
+
+// Stage 1 - capture. Turns raw attendee rows into contacts with conference encounters.
+// Nothing is dropped: unusable rows go to a correction queue, conflicting identifiers to identity review.
+(function (root, factory) {
+  if (typeof module === "object" && module.exports) module.exports = factory(require);
+  else { root.TalentOps = root.TalentOps || {}; Object.assign(root.TalentOps, factory(function () { return root.TalentOps; })); }
+})(typeof self !== "undefined" ? self : this, function (load) {
+  "use strict";
+  function normalizeUrl(url) {
+    return String(url || "").trim().toLowerCase().replace(/^https?:\/\//, "").replace(/^www\./, "").replace(/[/?#]+$/, "");
+  }
+  const normalizeEmail = (e) => String(e || "").trim().toLowerCase();
+  const normalizeName = (n) => String(n || "").toLowerCase().replace(/[^a-zÀ-ɏ ]/g, " ").replace(/\s+/g, " ").trim();
+
+  function ingestAttendees(rows) {
+    const contacts = [], byEmail = new Map(), byUrl = new Map();
+    const corrections = [], identityReview = [];
+    const summary = { rows: rows.length, created: 0, updated: 0, encounters_added: 0, corrections: 0, identity_review: 0 };
+
+    rows.forEach((row, index) => {
+      // An import can tag each row with its own file and line, so messages point at the file the recruiter uploaded.
+      const where = { row_number: row._row_number || index + 2, source_file: row._source_file || "" };
+      const email = normalizeEmail(row.email), url = normalizeUrl(row.linkedin_url);
+      const missing = [];
+      if (!String(row.full_name || "").trim()) missing.push("full_name");
+      if (!email && !url) missing.push("email or linkedin_url");
+      if (!String(row.conference_name || "").trim()) missing.push("conference_name");
+      if (missing.length) { corrections.push({ row_number: where.row_number, source_file: where.source_file, reason: "Missing " + missing.join(", "), row }); summary.corrections++; return; }
+
+      const viaEmail = email ? byEmail.get(email) : undefined;
+      const viaUrl = url ? byUrl.get(url) : undefined;
+      // Two identifiers pointing at two different people: never merge on a guess.
+      if (viaEmail && viaUrl && viaEmail !== viaUrl) {
+        identityReview.push({ row_number: where.row_number, source_file: where.source_file, reason: "Email and LinkedIn URL belong to different contacts", row }); summary.identity_review++; return;
+      }
+      let contact = viaEmail || viaUrl;
+      if (contact && normalizeName(contact.full_name) !== normalizeName(row.full_name)) {
+        identityReview.push({ row_number: where.row_number, source_file: where.source_file, reason: "Same identifier, different name", row }); summary.identity_review++; return;
+      }
+      if (!contact) {
+        contact = { contact_id: row.hubspot_id || "NEW-" + (index + 1), hubspot_id: row.hubspot_id || "", full_name: row.full_name, email: row.email || "", linkedin_url: url, company: row.company || "", title: row.title || "", encounters: [] };
+        contacts.push(contact); summary.created++;
+      } else {
+        // A blank value in a new import never overwrites existing data.
+        for (const f of ["email", "company", "title", "hubspot_id"]) if (!contact[f] && row[f]) contact[f] = row[f];
+        if (!contact.linkedin_url && url) contact.linkedin_url = url;
+        summary.updated++;
+      }
+      if (email) byEmail.set(email, contact);
+      if (url) byUrl.set(url, contact);
+
+      const existing = contact.encounters.find((e) => e.conference_name === row.conference_name && e.conference_date === (row.conference_date || ""));
+      if (existing) { if (row.notes && !existing.notes) existing.notes = row.notes; }
+      else {
+        contact.encounters.push({ conference_name: row.conference_name, conference_domain: row.conference_domain || "", conference_date: row.conference_date || "", source: row.source || "", notes: row.notes || "", title_at_event: row.title || "", company_at_event: row.company || "" });
+        summary.encounters_added++;
+      }
+    });
+    return { contacts, corrections, identityReview, summary };
+  }
+  return { ingestAttendees, normalizeUrl, normalizeEmail, normalizeName };
+});
+
+// Stage 2a - enrichment. Attaches a LinkedIn profile to each contact, or records why it could not.
+// A contact without a profile is kept and later classified from what was captured at the event.
+(function (root, factory) {
+  if (typeof module === "object" && module.exports) module.exports = factory(require);
+  else { root.TalentOps = root.TalentOps || {}; Object.assign(root.TalentOps, factory(function () { return root.TalentOps; })); }
+})(typeof self !== "undefined" ? self : this, function (load) {
+  "use strict";
+  const { normalizeUrl, normalizeName } = load("./ingest.js");
+  const { splitList } = load("./csv.js");
+  const STATUS = { ENRICHED: "enriched", NO_URL: "no_profile_url", NOT_FOUND: "profile_not_found", MISMATCH: "identity_mismatch", AMBIGUOUS: "ambiguous_profile" };
+
+  function indexProfiles(profileRows) {
+    const index = new Map();
+    for (const p of profileRows) { const k = normalizeUrl(p.linkedin_url); if (!index.has(k)) index.set(k, []); index.get(k).push(p); }
+    return index;
+  }
+  function enrichContact(contact, profileIndex) {
+    const base = { profile: null, enrichment_status: STATUS.ENRICHED, enrichment_note: "" };
+    if (!contact.linkedin_url) return Object.assign(base, { enrichment_status: STATUS.NO_URL, enrichment_note: "No LinkedIn URL captured; classified from event details only" });
+    const hits = profileIndex.get(normalizeUrl(contact.linkedin_url)) || [];
+    if (!hits.length) return Object.assign(base, { enrichment_status: STATUS.NOT_FOUND, enrichment_note: "No profile returned for this URL (missing, private or restricted)" });
+    if (hits.length > 1) return Object.assign(base, { enrichment_status: STATUS.AMBIGUOUS, enrichment_note: "More than one profile returned for this URL" });
+    const p = hits[0];
+    if (p.full_name && normalizeName(p.full_name) !== normalizeName(contact.full_name))
+      return Object.assign(base, { enrichment_status: STATUS.MISMATCH, enrichment_note: "Profile name '" + p.full_name + "' does not match the captured name" });
+    base.profile = {
+      current_title: p.current_title || "", current_company: p.current_company || "", location: p.location || "",
+      years_experience: p.years_experience === "" || p.years_experience == null ? null : Number(p.years_experience),
+      skills: splitList(p.top_skills), industry: p.industry || "", past_companies: splitList(p.past_companies),
+      past_titles: splitList(p.past_titles), mutual_connection_ids: splitList(p.wsc_mutual_connections), source: "linkedin_profiles.csv",
+    };
+    return base;
+  }
+  function enrichAll(contacts, profileRows) {
+    const index = indexProfiles(profileRows);
+    return contacts.map((c) => Object.assign({}, c, enrichContact(c, index)));
+  }
+  return { enrichAll, enrichContact, ENRICHMENT_STATUS: STATUS };
+});
+
+// Stage 2b - domain relevance. Works out what the person does (professional domain) from evidence,
+// then compares it with the domain of the conference where we met them. Nobody is removed here.
+(function (root, factory) {
+  if (typeof module === "object" && module.exports) module.exports = factory(require);
+  else { root.TalentOps = root.TalentOps || {}; Object.assign(root.TalentOps, factory(function () { return root.TalentOps; })); }
+})(typeof self !== "undefined" ? self : this, function (load) {
+  "use strict";
+  // One flat view of everything we know about a person, used by classification and matching alike.
+  function evidenceOf(contact) {
+    const p = contact.profile, last = contact.encounters[contact.encounters.length - 1] || {};
+    return {
+      title: (p ? p.current_title : contact.title || last.title_at_event || "").toLowerCase(),
+      skills: p ? p.skills : [],
+      industry: (p ? p.industry : "").toLowerCase(),
+      past_titles: (p ? p.past_titles.join("; ") : "").toLowerCase(),
+      notes: contact.encounters.map((e) => e.notes).filter(Boolean).join("; ").toLowerCase(),
+      years: p ? p.years_experience : null,
+      from_profile: !!p,
+    };
+  }
+  function classifyDomains(contact, config) {
+    const ev = evidenceOf(contact), skillSet = new Set(ev.skills.map((s) => s.toLowerCase())), found = [];
+    for (const [domain, rule] of Object.entries(config.professional_domains)) {
+      const titleHit = rule.title.find((t) => (" " + ev.title + " ").includes(t.length <= 4 ? " " + t.trim() + " " : t));
+      const skillHits = rule.skills.filter((s) => skillSet.has(s.toLowerCase()));
+      if (titleHit) found.push({ domain, basis: "current title", evidence: [contact.profile ? contact.profile.current_title : contact.title].concat(skillHits), strength: 2 });
+      else if (skillHits.length >= 2) found.push({ domain, basis: "skills", evidence: skillHits, strength: 1 });
+    }
+    found.sort((a, b) => b.strength - a.strength || b.evidence.length - a.evidence.length);
+    return found;
+  }
+  function conferenceRelevance(domains, contact, encounter, config) {
+    const rule = config.conference_relevance[encounter.conference_domain];
+    if (!rule) return { level: "unknown", reason: "Conference domain is not defined in the configuration" };
+    if (!domains.length) return { level: "unknown", reason: "Not enough evidence to tell what this person does" };
+    const ev = evidenceOf(contact), names = domains.map((d) => d.domain);
+    const haystack = [ev.industry, ev.skills.join(" ").toLowerCase(), ev.notes].join(" ");
+    const industryHit = rule.industry_terms.find((t) => haystack.includes(t));
+    const inDomain = names.find((n) => rule.in_domains.includes(n));
+    const adjacent = names.find((n) => rule.adjacent_domains.includes(n));
+    if (rule.in_requires_industry) {
+      if (industryHit) return { level: "in_domain", reason: "Works in the conference industry ('" + industryHit + "') as " + names[0] };
+      if (adjacent) return { level: "adjacent", reason: names[0] + " professional, but outside the conference industry" };
+      return { level: "outside", reason: names[0] + " in an unrelated industry" };
+    }
+    if (inDomain) return { level: "in_domain", reason: inDomain + " is the core audience of this conference" };
+    if (adjacent) return { level: "adjacent", reason: adjacent + " is a neighbouring field" };
+    if (rule.industry_makes_adjacent && industryHit) return { level: "adjacent", reason: "Works in the conference industry ('" + industryHit + "') in another function" };
+    return { level: "outside", reason: names[0] + " is not what this conference is about" };
+  }
+  function classifyAll(contacts, config) {
+    return contacts.map((c) => {
+      const domains = classifyDomains(c, config);
+      const encounters = c.encounters.map((e) => Object.assign({}, e, { relevance: conferenceRelevance(domains, c, e, config) }));
+      return Object.assign({}, c, { professional_domains: domains, encounters, classified_from: c.profile ? "LinkedIn profile" : "event details only" });
+    });
+  }
+  return { classifyAll, classifyDomains, conferenceRelevance, evidenceOf };
+});
+
+// Stages 3 - matching. Compares one person with one job, requirement by requirement, using the term table.
+// Every point in the score traces back to a requirement, a matched term and where that term was found.
+(function (root, factory) {
+  if (typeof module === "object" && module.exports) module.exports = factory(require);
+  else { root.TalentOps = root.TalentOps || {}; Object.assign(root.TalentOps, factory(function () { return root.TalentOps; })); }
+})(typeof self !== "undefined" ? self : this, function (load) {
+  "use strict";
+  const { evidenceOf } = load("./classify.js");
+  const { splitList } = load("./csv.js");
+
+  function parseJob(row) {
+    return { job_id: row.job_id, title: row.title, department: row.department, seniority: row.seniority,
+      required: splitList(row.required_skills), domains: splitList(row.key_domains), nice_to_have: splitList(row.nice_to_have) };
+  }
+  // Where else, besides the skills list, does this term show up? A self-reported skill that also
+  // appears in a title, a past title or the recruiter's note is better backed than a bare list entry.
+  function backing(term, requirement, ev) {
+    const needles = [term, requirement].map((t) => t.toLowerCase());
+    const where = [];
+    if (needles.some((n) => ev.title.includes(n))) where.push("current title");
+    if (needles.some((n) => ev.past_titles.includes(n))) where.push("past title");
+    if (needles.some((n) => ev.notes.includes(n))) where.push("recruiter note");
+    return where;
+  }
+  function assessRequirement(requirement, rule, ev, credit) {
+    const result = { requirement, level: "to_verify", credit: credit.none, matched_term: "", source: "", backed_by: [], question: "No evidence of " + requirement + " in the data we hold" };
+    if (!rule) { result.question = "No term-table entry for " + requirement; return result; }
+    const skills = new Map(ev.skills.map((s) => [s.toLowerCase(), s]));
+    const fromSkills = (terms) => (terms || []).map((t) => skills.get(t.toLowerCase())).find(Boolean);
+    const fromText = (spec) => { for (const [field, words] of Object.entries(spec || {})) { const w = words.find((x) => (ev[field] || "").includes(x)); if (w) return { field, word: w }; } return null; };
+    const fieldLabel = { title: "current title", notes: "recruiter note", industry: "industry" };
+
+    const fullSkill = fromSkills(rule.full), fullText = fromText(rule.text_full);
+    const partSkill = fromSkills(rule.partial), partText = fromText(rule.text_partial);
+    if (fullSkill || fullText) {
+      Object.assign(result, { level: "full", credit: credit.full, question: "" });
+      if (fullSkill) Object.assign(result, { matched_term: fullSkill, source: "skills list", backed_by: backing(fullSkill, requirement, ev) });
+      else Object.assign(result, { matched_term: fullText.word, source: fieldLabel[fullText.field], backed_by: [fieldLabel[fullText.field]] });
+    } else if (partSkill || partText) {
+      Object.assign(result, { level: "partial", credit: credit.partial });
+      if (partSkill) Object.assign(result, { matched_term: partSkill, source: "skills list", backed_by: backing(partSkill, requirement, ev) });
+      else Object.assign(result, { matched_term: partText.word, source: fieldLabel[partText.field], backed_by: [fieldLabel[partText.field]] });
+      result.question = "Related experience (" + result.matched_term + "); ask about hands-on " + requirement;
+    } else {
+      const misleading = fromSkills(rule.exclude);
+      if (misleading) result.question = misleading + " sounds close but is not " + requirement + "; ask directly";
+    }
+    return result;
+  }
+  function assessSeniority(job, ev, config) {
+    const s = config.seniority, senior = s.senior_title_terms.find((t) => ev.title.includes(t));
+    const years = ev.years, known = years != null;
+    const out = (credit, note) => ({ credit, note });
+    if (job.seniority === "Senior") {
+      if (senior) return out(1, "Title carries '" + senior + "'");
+      if (known && years >= s.Senior.partial_years) return out(0.5, years + " years of experience, no senior title");
+      return out(0, known ? years + " years, no senior title; verify level" : "Seniority unknown; verify");
+    }
+    if (job.seniority === "Mid-Senior") {
+      if (senior || (known && years >= s["Mid-Senior"].full_years)) return out(1, senior ? "Senior title" : years + " years of experience");
+      if (known && years >= s["Mid-Senior"].partial_years) return out(0.5, years + " years; slightly junior");
+      return out(0, known ? years + " years; junior for this role" : "Seniority unknown; verify");
+    }
+    if (known && years >= s.Mid.full_years) return out(1, senior ? "May be senior for a mid-level role (" + years + " years)" : years + " years of experience");
+    return out(known ? 0.5 : 0, known ? years + " years; junior for this role" : "Seniority unknown; verify");
+  }
+  function assessRoleFamily(job, ev, config) {
+    const fam = config.role_family[job.job_id] || { full: [], partial: [] };
+    const cur = fam.full.find((t) => ev.title.includes(t));
+    if (cur) return { credit: 1, note: "Current title is in the role family" };
+    const near = fam.partial.find((t) => ev.title.includes(t));
+    if (near) return { credit: 0.5, note: "Current title is a neighbouring role" };
+    const past = fam.full.find((t) => ev.past_titles.includes(t));
+    if (past) return { credit: 0.5, note: "Held this kind of role before" };
+    return { credit: 0, note: "Different role family" };
+  }
+  const mean = (xs) => (xs.length ? xs.reduce((a, b) => a + b, 0) / xs.length : 0);
+
+  function matchContact(contact, job, taxonomy, config, weights) {
+    const ev = evidenceOf(contact), table = taxonomy[job.job_id] || {}, w = weights || config.weights;
+    const assess = (list, group) => list.map((r) => assessRequirement(r, (table[group] || {})[r], ev, config.credit));
+    const required = assess(job.required, "required"), domains = assess(job.domains, "domains"), nice = assess(job.nice_to_have, "nice_to_have");
+    const seniority = assessSeniority(job, ev, config), family = assessRoleFamily(job, ev, config);
+    const coverage = { required: mean(required.map((r) => r.credit)), domains: mean(domains.map((r) => r.credit)), nice_to_have: mean(nice.map((r) => r.credit)) };
+    const parts = { required: w.required * coverage.required, domains: w.domains * coverage.domains, role_family: w.role_family * family.credit, seniority: w.seniority * seniority.credit, nice_to_have: w.nice_to_have * coverage.nice_to_have };
+    const total = Object.values(w).reduce((a, b) => a + b, 0) || 1;
+    const score = Math.round((1000 * Object.values(parts).reduce((a, b) => a + b, 0)) / total) / 10;
+    const rule = config.shortlist_rule;
+    const domainCredit = domains.reduce((a, r) => a + r.credit, 0);
+    const shortlisted = coverage.required >= rule.min_required_coverage && domainCredit >= rule.min_domain_credit;
+    return { contact, job_id: job.job_id, score, parts, coverage, required, domains, nice_to_have: nice, seniority, role_family: family, shortlisted,
+      required_full: required.filter((r) => r.level === "full").length,
+      backed_count: required.concat(domains).filter((r) => r.level !== "to_verify" && r.backed_by.length).length,
+      preliminary: !ev.from_profile };
+  }
+  // Scores closer than band_width are a tie for practical purposes: showing them as 1st, 2nd, 3rd would be false precision.
+  function rankMatches(matches, config) {
+    const byTie = (a, b) => b.coverage.required - a.coverage.required || b.backed_count - a.backed_count || b.score - a.score || a.contact.full_name.localeCompare(b.contact.full_name);
+    const short = matches.filter((m) => m.shortlisted).sort((a, b) => b.score - a.score);
+    let band = 0, leader = null;
+    for (const m of short) { if (leader === null || leader - m.score >= config.band_width) { band++; leader = m.score; } m.band = band; }
+    short.sort((a, b) => a.band - b.band || byTie(a, b));
+    // Contacts below the line get no band; they stay visible, ordered by score.
+    const rest = matches.filter((m) => !m.shortlisted).sort((a, b) => b.score - a.score || byTie(a, b));
+    rest.forEach((m) => { m.band = null; });
+    return short.concat(rest);
+  }
+  return { parseJob, matchContact, rankMatches, assessRequirement };
+});
+
+// Stage 4 - mutual connections. A LinkedIn connection is not proof that two people know each other,
+// so each one is graded by shared work history. Connections never change the match score.
+(function (root, factory) {
+  if (typeof module === "object" && module.exports) module.exports = factory(require);
+  else { root.TalentOps = root.TalentOps || {}; Object.assign(root.TalentOps, factory(function () { return root.TalentOps; })); }
+})(typeof self !== "undefined" ? self : this, function (load) {
+  "use strict";
+  const { splitList } = load("./csv.js");
+  const STRENGTH = { WORKED: "worked_together", EMPLOYER: "same_employer", LINKEDIN: "linkedin_only" };
+  const RANK = { worked_together: 3, same_employer: 2, linkedin_only: 1 };
+
+  function parseSpans(entries) {
+    const spans = [];
+    for (const raw of entries) {
+      const m = raw.match(/^(.*?)\s*\((\d{4})\s*-\s*(\d{4}|present)/i);
+      if (!m) continue;
+      const company = m[1].replace(/^.*\bat\s+/i, "").trim();
+      spans.push({ company, start: Number(m[2]), end: /present/i.test(m[3]) ? 9999 : Number(m[3]) });
+    }
+    return spans;
+  }
+  function sameCompany(a, b, cfg) {
+    const generic = (s) => cfg.generic_employers.some((g) => s.toLowerCase().includes(g));
+    if (generic(a) || generic(b)) return false;
+    const tokens = (s) => new Set(s.toLowerCase().replace(/[^a-z0-9 ]/g, " ").split(/\s+/).filter((t) => t && !cfg.company_stopwords.includes(t)));
+    const ta = tokens(a), tb = tokens(b);
+    return [...ta].some((t) => tb.has(t));
+  }
+  function gradeConnection(contact, employee, cfg) {
+    const p = contact.profile, empSpans = parseSpans(splitList(employee.work_history));
+    const candSpans = parseSpans(p.past_titles);
+    // The current job has no dates in the data; assume it started when the latest past role ended.
+    if (p.current_company && !candSpans.some((s) => s.end === 9999)) {
+      const latestEnd = Math.max(0, ...candSpans.map((s) => s.end));
+      candSpans.push({ company: p.current_company, start: latestEnd || 0, end: 9999, inferred: true });
+    }
+    let best = { strength: STRENGTH.LINKEDIN, detail: "Connected on LinkedIn; no shared employer found" };
+    for (const c of candSpans) for (const e of empSpans) {
+      if (!sameCompany(c.company, e.company, cfg)) continue;
+      const from = Math.max(c.start, e.start), to = Math.min(c.end, e.end);
+      if (from <= to && !c.inferred) return { strength: STRENGTH.WORKED, detail: "Both at " + e.company + " in " + from + (to !== from ? "-" + to : "") };
+      if (best.strength === STRENGTH.LINKEDIN) best = { strength: STRENGTH.EMPLOYER, detail: "Both worked at " + e.company + ", overlap not confirmed" };
+    }
+    return best;
+  }
+  function resolveConnections(contact, employees, cfg) {
+    if (!contact.profile) return { status: "unknown", list: [], note: "No profile, so connections are unknown" };
+    const ids = contact.profile.mutual_connection_ids;
+    if (!ids.length) return { status: "none", list: [], note: "No known internal connection" };
+    const byId = new Map(employees.map((e) => [e.employee_id, e])), list = [], unknownIds = [];
+    for (const id of ids) {
+      const e = byId.get(id);
+      if (!e) { unknownIds.push(id); continue; }   // left the company, or bad ID: never shown as a reference
+      list.push(Object.assign({ employee_id: id, name: e.full_name, title: e.title, department: e.department }, gradeConnection(contact, e, cfg)));
+    }
+    list.sort((a, b) => RANK[b.strength] - RANK[a.strength] || a.name.localeCompare(b.name));
+    return { status: list.length ? "found" : "none", list, unknown_ids: unknownIds, note: list.length ? "" : "Listed connections are not current employees" };
+  }
+  return { resolveConnections, gradeConnection, parseSpans, CONNECTION_STRENGTH: STRENGTH };
+});
+
+// Output. One row per contact and job, flat and HubSpot-ready: hubspot_id and email identify the record.
+(function (root, factory) {
+  if (typeof module === "object" && module.exports) module.exports = factory(require);
+  else { root.TalentOps = root.TalentOps || {}; Object.assign(root.TalentOps, factory(function () { return root.TalentOps; })); }
+})(typeof self !== "undefined" ? self : this, function (load) {
+  "use strict";
+  const { toCsv } = load("./csv.js");
+  const COLUMNS = ["hubspot_id", "email", "full_name", "current_title", "current_company", "job_id", "job_title", "shortlisted", "priority_band", "match_score",
+    "required_coverage", "required_met", "required_partial", "required_to_verify", "domain_evidence", "role_family_fit", "seniority_fit", "nice_to_have_met",
+    "professional_domains", "met_at", "conference_relevance", "enrichment_status", "connection_count", "strongest_connection", "internal_connections",
+    "ats_status", "consent_basis", "recruiter_notes", "why_this_person", "next_step", "linkedin_url"];
+  const STRENGTH_TEXT = { worked_together: "worked together", same_employer: "same employer", linkedin_only: "LinkedIn only" };
+  const describe = (r) => r.requirement + (r.matched_term && r.matched_term.toLowerCase() !== r.requirement.toLowerCase() ? " (via " + r.matched_term + ")" : "");
+
+  function nextStep(m) {
+    const strong = m.connections.list.find((c) => c.strength === "worked_together");
+    const gaps = m.required.filter((r) => r.level !== "full").map((r) => r.requirement);
+    const ask = gaps.length ? " Verify: " + gaps.join(", ") + "." : "";
+    if (m.preliminary) return "Complete the LinkedIn profile before outreach; this assessment uses event details only." + ask;
+    if (strong) return "Ask " + strong.name + " (" + strong.detail.charAt(0).toLowerCase() + strong.detail.slice(1) + ") about their work together, then reach out." + ask;
+    if (m.connections.list.length) return "Ask " + m.connections.list[0].name + " whether they actually know this person before using them as a reference." + ask;
+    return "Direct outreach; no known internal connection." + ask;
+  }
+  function whyThisPerson(m) {
+    const full = m.required.filter((r) => r.level === "full").length, dom = m.domains.filter((r) => r.level !== "to_verify").map(describe);
+    return full + " of " + m.required.length + " required skills documented" + (dom.length ? "; domain evidence: " + dom.join(", ") : "; no domain evidence");
+  }
+  function toRecord(m, job) {
+    const c = m.contact, p = c.profile, last = c.encounters[c.encounters.length - 1];
+    const pick = (list, level) => list.filter((r) => r.level === level).map(describe).join("; ");
+    return {
+      hubspot_id: c.hubspot_id, email: c.email, full_name: c.full_name, current_title: p ? p.current_title : c.title, current_company: p ? p.current_company : c.company,
+      job_id: job.job_id, job_title: job.title, shortlisted: m.shortlisted ? "yes" : "no", priority_band: m.band == null ? "below the line" : m.band, match_score: m.score.toFixed(1),
+      required_coverage: m.required_full + "/" + m.required.length, required_met: pick(m.required, "full"), required_partial: pick(m.required, "partial"),
+      required_to_verify: pick(m.required, "to_verify"), domain_evidence: m.domains.filter((r) => r.level !== "to_verify").map(describe).join("; "),
+      role_family_fit: m.role_family.note, seniority_fit: m.seniority.note, nice_to_have_met: m.nice_to_have.filter((r) => r.level !== "to_verify").map(describe).join("; "),
+      professional_domains: c.professional_domains.map((d) => d.domain).join("; ") || "Unknown",
+      met_at: c.encounters.map((e) => e.conference_name + " (" + e.conference_date + ")").join("; "),
+      conference_relevance: last ? last.relevance.level : "unknown", enrichment_status: c.enrichment_status,
+      connection_count: m.connections.list.length, strongest_connection: m.connections.list.length ? STRENGTH_TEXT[m.connections.list[0].strength] : (m.connections.status === "unknown" ? "unknown" : "none"),
+      internal_connections: m.connections.list.map((x) => x.name + " - " + x.title + " [" + STRENGTH_TEXT[x.strength] + ": " + x.detail + "]").join("; ") || m.connections.note,
+      ats_status: "unknown (no Comeet data in this exercise)", consent_basis: "not recorded (simulated data)",
+      recruiter_notes: c.encounters.map((e) => e.notes).filter(Boolean).join("; "), why_this_person: whyThisPerson(m), next_step: nextStep(m), linkedin_url: c.linkedin_url,
+    };
+  }
+  function exportMatches(matches, job) { return toCsv(COLUMNS, matches.map((m) => toRecord(m, job))); }
+  return { exportMatches, toRecord, nextStep, whyThisPerson, OUTPUT_COLUMNS: COLUMNS, STRENGTH_TEXT };
+});
+
+// The pipeline, end to end. buildTalentPool runs once per import; matchJob runs each time a recruiter picks a job.
+(function (root, factory) {
+  if (typeof module === "object" && module.exports) module.exports = factory(require);
+  else { root.TalentOps = root.TalentOps || {}; Object.assign(root.TalentOps, factory(function () { return root.TalentOps; })); }
+})(typeof self !== "undefined" ? self : this, function (load) {
+  "use strict";
+  const { parseCsv } = load("./csv.js");
+  const { ingestAttendees } = load("./ingest.js");
+  const { enrichAll } = load("./enrich.js");
+  const { classifyAll } = load("./classify.js");
+  const { parseJob, matchContact, rankMatches } = load("./match.js");
+  const { resolveConnections } = load("./connections.js");
+
+  // Stages 1-2: attendees + profiles -> a searchable pool where everyone is kept.
+  function buildTalentPool(attendeeRows, profileRows, config) {
+    const ingested = ingestAttendees(attendeeRows);
+    const contacts = classifyAll(enrichAll(ingested.contacts, profileRows), config);
+    return { contacts, corrections: ingested.corrections, identityReview: ingested.identityReview, summary: ingested.summary };
+  }
+  // Stages 3-4: pool + job_id -> ranked matches with evidence and graded connections.
+  function matchJob(pool, jobRows, employeeRows, jobId, taxonomy, config, weights) {
+    const row = jobRows.find((j) => j.job_id === jobId);
+    if (!row) throw new Error("Unknown job_id '" + jobId + "'. Available: " + jobRows.map((j) => j.job_id).join(", "));
+    const job = parseJob(row);
+    if (!job.required.length) throw new Error("Job " + jobId + " has no required skills, so there is nothing to match against");
+    const matches = pool.contacts.map((c) => {
+      const m = matchContact(c, job, taxonomy, config, weights);
+      m.connections = resolveConnections(c, employeeRows, config.connections);
+      return m;
+    });
+    const ranked = rankMatches(matches, config);
+    return { job, matches: ranked, shortlist: ranked.filter((m) => m.shortlisted) };
+  }
+  function runFromCsvText(texts, jobId, taxonomy, config, weights) {
+    const pool = buildTalentPool(parseCsv(texts.attendees), parseCsv(texts.profiles), config);
+    return Object.assign({ pool }, matchJob(pool, parseCsv(texts.jobs), parseCsv(texts.employees), jobId, taxonomy, config, weights));
+  }
+  return { buildTalentPool, matchJob, runFromCsvText };
+});
+</script>
+<script>// Recruiter view. Display only: every number shown here comes from the same engine the command line uses.
+(function () {
+  "use strict";
+  const T = window.TalentOps, D = window.TALENTOPS_DATA, $ = (s) => document.querySelector(s);
+  const esc = (v) => String(v == null ? "" : v).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  const jobs = T.parseCsv(D.jobs), employees = T.parseCsv(D.employees);
+  const LEVEL = { full: "Documented", partial: "Related", to_verify: "To verify" };
+  const REL = { in_domain: "In domain", adjacent: "Adjacent", outside: "Outside", unknown: "Unknown" };
+  const WEIGHT_LABEL = { required: "Required skills", domains: "Key domains", role_family: "Role family", seniority: "Seniority", nice_to_have: "Nice to have" };
+  const state = {
+    view: "matches", jobId: "JOB001", weights: Object.assign({}, D.config.weights), selected: null, search: "", conn: "any",
+    attendees: T.parseCsv(D.attendees), profiles: T.parseCsv(D.profiles), imported: null,
+    pf: { conference: "all", domain: "all", relevance: "all", q: "" }, csv: "",
+  };
+  let pool, result;
+
+  const counts = {};
+  function compute() {
+    pool = T.buildTalentPool(state.attendees, state.profiles, D.config);
+    jobs.forEach((j) => { counts[j.job_id] = T.matchJob(pool, jobs, employees, j.job_id, D.taxonomy, D.config).shortlist.length; });
+    result = T.matchJob(pool, jobs, employees, state.jobId, D.taxonomy, D.config, state.weights);
+    if (!result.matches.some((m) => m.contact.contact_id === state.selected)) state.selected = (result.shortlist[0] || result.matches[0] || { contact: {} }).contact.contact_id || null;
+  }
+  const titleOf = (c) => (c.profile ? c.profile.current_title : c.title), companyOf = (c) => (c.profile ? c.profile.current_company : c.company);
+  function toast(msg) { const t = $("#toast"); t.textContent = msg; t.hidden = false; clearTimeout(toast.t); toast.t = setTimeout(() => (t.hidden = true), 3200); }
+
+  // ---------- Role matches ----------
+  function visible(m) {
+    const q = state.search.trim().toLowerCase(), c = m.contact;
+    if (q && !(c.full_name + " " + titleOf(c) + " " + companyOf(c) + " " + (c.profile ? c.profile.skills.join(" ") : "")).toLowerCase().includes(q)) return false;
+    if (state.conn === "worked" && !m.connections.list.some((x) => x.strength === "worked_together")) return false;
+    if (state.conn === "any_conn" && !m.connections.list.length) return false;
+    return true;
+  }
+  function rowHtml(m) {
+    const c = m.contact, top = m.connections.list[0];
+    const strip = m.required.map((r) => '<span class="seg ' + r.level + '" title="' + esc(r.requirement + ": " + LEVEL[r.level] + (r.matched_term ? " (" + r.matched_term + ")" : "")) + '">' + esc(r.requirement) + "</span>").join("");
+    const conn = top ? '<span class="pill ' + top.strength + '">' + esc(top.strength === "worked_together" ? "Worked with " + top.name.split(" ")[0] : top.strength === "same_employer" ? "Shared employer" : m.connections.list.length + " on LinkedIn") + "</span>" : '<span class="pill none">' + (m.connections.status === "unknown" ? "Connections unknown" : "No connection") + "</span>";
+    return '<button class="row" data-id="' + esc(c.contact_id) + '" aria-current="' + (c.contact_id === state.selected) + '">' +
+      '<span class="score">' + m.score.toFixed(1) + "</span>" +
+      '<span class="who"><b>' + esc(c.full_name) + "</b> <span>" + esc(titleOf(c)) + ", " + esc(companyOf(c)) + (m.preliminary ? " (preliminary)" : "") + "</span></span>" +
+      '<span class="right">' + conn + "</span>" +
+      '<span class="strip" aria-label="' + m.required_full + " of " + m.required.length + ' required skills documented">' + strip + "</span></button>";
+  }
+  function matchesHtml() {
+    const job = result.job, short = result.shortlist.filter(visible), below = result.matches.filter((m) => !m.shortlisted).filter(visible);
+    const bands = new Map(); short.forEach((m) => { if (!bands.has(m.band)) bands.set(m.band, []); bands.get(m.band).push(m); });
+    const total = Object.values(state.weights).reduce((a, b) => a + b, 0) || 1;
+    const changed = Object.keys(state.weights).some((k) => state.weights[k] !== D.config.weights[k]);
+    const topCount = result.shortlist.filter((m) => m.band === 1).length, worked = result.shortlist.filter((m) => m.connections.list.some((x) => x.strength === "worked_together")).length;
+    const chips = (xs) => xs.map((x) => '<span class="chip">' + esc(x) + "</span>").join("");
+    const bandHtml = [...bands.entries()].map(([bandNo, ms]) => {
+      const lo = Math.min(...ms.map((m) => m.score)), hi = Math.max(...ms.map((m) => m.score));
+      return '<section class="band"><h2>Priority band ' + bandNo + " <small>" + (ms.length > 1 ? ms.length + " people within " + D.config.band_width + " points of each other, so treat them as a tie" : "score " + hi.toFixed(1)) + "</small></h2>" + ms.map(rowHtml).join("") + "</section>";
+    }).join("");
+    return '<div class="grid"><div>' +
+      '<div class="jobcard"><h1>' + esc(job.title) + '</h1><div class="meta">' + esc(job.department) + ", " + esc(job.seniority.toLowerCase()) + " level, " + esc(job.job_id) + "</div>" +
+      '<p class="lede"><b>' + result.shortlist.length + " of " + pool.contacts.length + "</b> people we met fit this role. " + (topCount > 1 ? "<b>" + topCount + "</b> are effectively tied at the top" : "One stands clear at the top") + (worked ? ", and <b>" + worked + "</b> " + (worked === 1 ? "has" : "have") + " worked alongside someone at WSC." : ".") + "</p>" +
+      '<dl class="reqs"><dt>Required</dt><dd>' + chips(job.required) + "</dd><dt>Key domains</dt><dd>" + chips(job.domains) + "</dd><dt>Nice to have</dt><dd>" + chips(job.nice_to_have) + "</dd></dl></div>" +
+      '<div class="controls"><input type="search" id="q" placeholder="Search name, title, company or skill" value="' + esc(state.search) + '" aria-label="Search matches">' +
+      '<select id="conn" aria-label="Filter by connection"><option value="any">Everyone</option><option value="any_conn">Connected to someone at WSC</option><option value="worked">Worked with someone at WSC</option></select>' +
+      '<button class="btn primary" id="export">Export shortlist CSV</button><button class="btn" id="copy">Copy CSV</button></div>' +
+      '<details class="weights"' + (changed ? " open" : "") + '><summary>Adjust the scoring weights' + (changed ? " (changed)" : "") + '</summary><div class="wgrid">' +
+      Object.keys(state.weights).map((k) => '<label for="w-' + k + '">' + WEIGHT_LABEL[k] + '</label><input type="range" id="w-' + k + '" data-w="' + k + '" min="0" max="100" step="5" value="' + state.weights[k] + '"><output>' + Math.round((100 * state.weights[k]) / total) + "%</output>").join("") +
+      '</div><div class="wnote"><span>Weights change the order. Who is shortlisted depends on evidence, not weights: at least half of the required skills covered, plus evidence for one key domain.</span><button class="btn" id="reset">Reset to 60 / 25 / 5 / 5 / 5</button></div></details>' +
+      (state.csv ? '<textarea class="csv" id="csvbox" readonly aria-label="Shortlist CSV">' + esc(state.csv) + "</textarea>" : "") +
+      (short.length ? '<div class="legend"><span class="seg full">documented</span><span class="seg partial">related experience</span><span class="seg to_verify">ask in the first call</span></div>' + bandHtml : '<div class="card pad" style="margin-top:18px"><b>No one matches these filters.</b><p class="muted">The shortlist for this role has ' + result.shortlist.length + " contacts. Everyone else stays in the pool for future roles.</p></div>") +
+      '<details class="below"><summary>Below the line: ' + below.length + " contacts who do not meet the shortlist rule</summary>" + below.slice(0, 80).map(rowHtml).join("") + "</details>" +
+      "</div><aside>" + detailHtml() + "</aside></div>";
+  }
+  function evRows(list) {
+    return list.map((r) => '<tr><td><span class="pill ' + r.level + '">' + LEVEL[r.level] + "</span></td><td>" + esc(r.requirement) + '</td><td class="why">' +
+      (r.level === "to_verify" ? esc(r.question) : "<b>" + esc(r.matched_term) + "</b> in " + esc(r.source) + (r.source === "skills list" ? (r.backed_by.length ? "; also backed by " + esc(r.backed_by.join(" and ")) : "; self-reported only") : "") + (r.level === "partial" ? ". " + esc(r.question) : "")) + "</td></tr>").join("");
+  }
+  function detailHtml() {
+    const m = result.matches.find((x) => x.contact.contact_id === state.selected);
+    if (!m) return '<div class="detail"><div class="pad muted">Pick someone from the list to see the evidence.</div></div>';
+    const c = m.contact, p = c.profile, w = state.weights;
+    const keys = Object.keys(w), wsum = keys.reduce((a, k) => a + w[k], 0) || 1, SW = ["var(--c0)", "var(--c1)", "var(--c2)", "var(--c3)", "var(--c4)"];
+    const bars = '<div class="stack" role="img" aria-label="Score breakdown">' + keys.map((k, i) => '<i class="s' + i + '" style="width:' + (100 * m.parts[k]) / wsum + '%"></i>').join("") + '</div><div class="parts">' + keys.map((k, i) => '<span><u style="background:' + SW[i] + '"></u>' + WEIGHT_LABEL[k] + "<em>" + m.parts[k].toFixed(1) + " of " + w[k] + "</em></span>").join("") + "</div>";
+    const conns = m.connections.list.length ? m.connections.list.map((x) => '<div class="conn"><span class="av" aria-hidden="true">' + esc(x.name.split(" ").map((n) => n[0]).join("").slice(0, 2)) + "</span><b>" + esc(x.name) + ", " + esc(x.title) + '</b><span class="pill ' + x.strength + '">' + esc(T.STRENGTH_TEXT[x.strength]) + '</span><span class="d">' + esc(x.detail) + "</span></div>").join("") : '<p class="muted">' + esc(m.connections.note) + ". This does not affect the score.</p>";
+    const met = c.encounters.map((e) => '<dl class="kv"><dt>Conference</dt><dd>' + esc(e.conference_name) + ", " + esc(e.conference_date) + "</dd><dt>Captured by</dt><dd>" + esc(e.source || "not recorded") + '</dd><dt>Domain relevance</dt><dd><span class="pill ' + e.relevance.level + '">' + REL[e.relevance.level] + "</span> " + esc(e.relevance.reason) + "</dd>" + (e.notes ? "<dt>Recruiter note</dt><dd>" + esc(e.notes) + "</dd>" : "") + "</dl>").join('<hr class="sep">');
+    return '<div class="detail"><div class="pad"><div class="head"><div><h2>' + esc(c.full_name) + '</h2><div class="muted">' + esc(titleOf(c)) + " at " + esc(companyOf(c)) + (p && p.location ? ", " + esc(p.location) : "") + "</div></div>" +
+      '<div class="big">' + m.score.toFixed(1) + "<small>" + (m.shortlisted ? "priority band " + m.band : "below the line") + "</small></div></div>" +
+      '<p style="margin-top:10px">' + esc(T.whyThisPerson(m)) + (m.preliminary ? ' <span class="pill partial">preliminary: no LinkedIn profile</span>' : "") + "</p>" +
+      '<div class="next"><b>Suggested next step</b>' + esc(T.nextStep(m)) + "</div></div>" +
+      '<div class="sec"><h3>Required skills<small>' + m.required_full + " of " + m.required.length + ' documented</small></h3><table class="ev">' + evRows(m.required) + "</table></div>" +
+      '<div class="sec"><h3>Key domains</h3><table class="ev">' + evRows(m.domains) + "</table></div>" +
+      '<div class="sec"><h3>Nice to have</h3><table class="ev">' + evRows(m.nice_to_have) + "</table></div>" +
+      '<div class="sec"><h3>Role and seniority</h3><dl class="kv"><dt>Role family</dt><dd>' + esc(m.role_family.note) + "</dd><dt>Seniority</dt><dd>" + esc(m.seniority.note) + "</dd></dl></div>" +
+      '<div class="sec"><h3>How the score adds up</h3>' + bars + '<p class="muted small" style="margin-top:10px">The score is documented coverage of this job\'s requirements. It is not a prediction of success.</p></div>' +
+      '<div class="sec"><h3>People at WSC<small>never part of the score</small></h3>' + conns + "</div>" +
+      '<div class="sec"><h3>Where we met</h3>' + met + "</div>" +
+      '<div class="sec"><h3>Profile</h3><dl class="kv"><dt>Enrichment</dt><dd>' + esc(c.enrichment_status.replace(/_/g, " ")) + (c.enrichment_note ? ". " + esc(c.enrichment_note) : "") + "</dd><dt>Works in</dt><dd>" + esc(c.professional_domains.map((d) => d.domain).join(", ") || "Unknown") + "</dd>" +
+      (p ? "<dt>Skills</dt><dd>" + p.skills.map((s) => '<span class="chip">' + esc(s) + "</span>").join(" ") + "</dd><dt>Experience</dt><dd>" + esc(p.years_experience) + " years, " + esc(p.industry) + "</dd><dt>Before</dt><dd>" + esc(p.past_titles.join("; ")) + "</dd>" : "") +
+      "<dt>ATS status</dt><dd>Unknown (no Comeet data in this exercise)</dd></dl></div></div>";
+  }
+
+  // ---------- Talent pool ----------
+  function poolHtml() {
+    const f = state.pf, confs = [...new Set(pool.contacts.flatMap((c) => c.encounters.map((e) => e.conference_name)))], doms = [...new Set(pool.contacts.flatMap((c) => c.professional_domains.map((d) => d.domain)))].sort();
+    const rows = pool.contacts.filter((c) => {
+      const e = c.encounters[c.encounters.length - 1];
+      if (f.conference !== "all" && !c.encounters.some((x) => x.conference_name === f.conference)) return false;
+      if (f.domain !== "all" && !c.professional_domains.some((d) => d.domain === f.domain)) return false;
+      if (f.relevance !== "all" && e.relevance.level !== f.relevance) return false;
+      return !f.q || (c.full_name + " " + titleOf(c) + " " + companyOf(c)).toLowerCase().includes(f.q.toLowerCase());
+    });
+    const opt = (v, l, cur) => '<option value="' + esc(v) + '"' + (v === cur ? " selected" : "") + ">" + esc(l) + "</option>";
+    const s = pool.summary, im = state.imported;
+    const at = (x) => (x.source_file ? x.source_file + ", row " : "Row ") + x.row_number;
+    const issues = pool.corrections.map((x) => at(x) + ": " + x.reason.replace("Missing", "missing") + ". Kept in the correction queue.").concat(pool.identityReview.map((x) => at(x) + " (" + (x.row.full_name || "unnamed") + "): " + x.reason.charAt(0).toLowerCase() + x.reason.slice(1) + ". Held for identity review."));
+    const n = (k, one, many) => k + " " + (k === 1 ? one : many);
+    return '<div class="pagehead"><h1>Talent pool</h1><p><b style="color:var(--ink)">' + pool.contacts.length + " people</b> from " + confs.length + " conferences, " + pool.contacts.filter((c) => c.profile).length + " with a LinkedIn profile attached" + (pool.contacts.some((c) => !c.profile) ? " and " + pool.contacts.filter((c) => !c.profile).length + " kept on badge details alone" : "") + ". Everyone stays: someone outside one conference's field can be exactly right for a later role.</p></div>" +
+      '<div class="controls"><input type="search" id="pq" placeholder="Search the pool" value="' + esc(f.q) + '" aria-label="Search the pool">' +
+      '<select id="p-conf" aria-label="Conference">' + opt("all", "All conferences", f.conference) + confs.map((c) => opt(c, c, f.conference)).join("") + "</select>" +
+      '<select id="p-dom" aria-label="Professional domain">' + opt("all", "All professional domains", f.domain) + doms.map((d) => opt(d, d, f.domain)).join("") + "</select>" +
+      '<select id="p-rel" aria-label="Relevance">' + opt("all", "Any relevance", f.relevance) + Object.keys(REL).map((k) => opt(k, REL[k] + " for the conference", f.relevance)).join("") + "</select>" +
+      '<span class="muted">' + rows.length + " of " + pool.contacts.length + "</span></div>" +
+      '<div class="card tablewrap"><table class="pool"><thead><tr><th>Name</th><th>Role</th><th>Works in</th><th>Met at</th><th>Relevance to that conference</th><th>Enrichment</th></tr></thead><tbody>' +
+      rows.map((c) => { const e = c.encounters[c.encounters.length - 1]; return "<tr><td><b>" + esc(c.full_name) + "</b></td><td>" + esc(titleOf(c)) + '<div class="muted small">' + esc(companyOf(c)) + "</div></td><td>" + esc(c.professional_domains.map((d) => d.domain).join(", ") || "Unknown") + "</td><td>" + esc(c.encounters.map((x) => x.conference_name).join("; ")) + '</td><td><span class="pill ' + e.relevance.level + '">' + REL[e.relevance.level] + '</span><div class="muted small">' + esc(e.relevance.reason) + "</div></td><td>" + esc(c.enrichment_status.replace(/_/g, " ")) + "</td></tr>"; }).join("") +
+      "</tbody></table></div>" +
+      '<div class="card pad importbox"><h3>Add a conference export</h3><p class="muted small">Same columns as conference_attendees.csv. Profiles are optional: people without one are kept and classified from their badge details. Try data/samples/new_conference_export.csv.</p>' +
+      '<div class="import"><div><label for="f-att">Attendees CSV</label><input type="file" id="f-att" accept=".csv,text/csv"></div><div><label for="f-prof">LinkedIn profiles CSV (optional)</label><input type="file" id="f-prof" accept=".csv,text/csv"></div><div><button class="btn primary" id="do-import">Add to the pool</button> <button class="btn" id="undo-import">Reset to provided data</button></div></div>' +
+      (im ? '<div class="notice"><b>Import finished.</b> ' + n(im.rows, "row", "rows") + " read: " + n(im.created, "new contact", "new contacts") + ", " + n(im.updated, "existing contact", "existing contacts") + " updated, " + n(im.encounters, "encounter", "encounters") + " added, " + n(im.held, "row", "rows") + " held for review.</div>" : "") +
+      (issues.length ? '<div class="notice"><b>Rows that need a person to look at them</b><ul>' + issues.map((x) => "<li>" + esc(x) + "</li>").join("") + "</ul></div>" : "") + "</div>";
+  }
+
+  // ---------- How it works ----------
+  function howHtml() {
+    const tx = D.taxonomy[state.jobId], G = { required: "Required skills", domains: "Key domains", nice_to_have: "Nice to have" }, F = { title: "title", notes: "recruiter note", industry: "industry" };
+    const chips = (terms, text) => (terms || []).map((t) => '<span class="chip">' + esc(t) + "</span>").concat(Object.entries(text || {}).flatMap(([f, ws]) => ws.map((w) => '<span class="chip" style="border-style:dashed">' + F[f] + " contains “" + esc(w) + "”</span>"))).join(" ") || '<span class="muted">none</span>';
+    const rows = Object.keys(G).map((g) => '<tr class="g"><td colspan="4">' + G[g] + "</td></tr>" + Object.entries(tx[g]).map(([r, d]) => "<tr><td><b>" + esc(r) + "</b></td><td>" + chips(d.full, d.text_full) + "</td><td>" + chips(d.partial, d.text_partial) + "</td><td>" + chips(d.exclude) + "</td></tr>").join("")).join("");
+    const w = D.config.weights;
+    return '<div class="pagehead"><h1>How it works</h1><p>Four steps, one after the other. The same code runs here and on the command line.</p></div><div class="steps">' + [
+      ["Capture", "Every attendee becomes a contact with a record of where we met. Importing a file twice creates no duplicates, and rows we cannot use wait in a correction queue."],
+      ["Enrich and classify", "A LinkedIn profile is attached by URL when one exists. Title, skills and industry tell us what the person does, and we compare that with the conference's field. No profile? They are kept and classified from the badge."],
+      ["Match to a role", "Each requirement is looked up in a term table. An equivalent term earns full credit, a related one half, a misleading one nothing. No evidence means a question to ask, never a rejection."],
+      ["Find an introduction", "Connections are checked against the current employee list and graded by shared work history. They shape the next step and never change the score."],
+    ].map((x, i) => '<div><span class="n">' + (i + 1) + "</span><h3>" + x[0] + '</h3><p class="muted">' + x[1] + "</p></div>").join("") + "</div>" +
+      '<div class="block"><h3>How the score is built</h3><p class="muted" style="max-width:76ch;margin-top:6px">Required skills ' + w.required + ", key domains " + w.domains + ", role family " + w.role_family + ", seniority " + w.seniority + ", nice to have " + w.nice_to_have + ". Inside each group every requirement weighs the same. These are starting values: six alternative weightings, from equal weights to 80% on required skills, keep at least 7 of the top 10 for every job, so the list follows the evidence more than the exact numbers. Try the sliders on the shortlist.</p></div>" +
+      '<div class="block"><h3>Term table for ' + esc(result.job.title) + '</h3><p class="muted" style="max-width:76ch;margin:6px 0 14px">Job wording and profile wording differ. “Object Detection” is required for the ML role and appears in none of the 75 profiles; YOLO does. The table is plain configuration, a first version for the hiring manager to review.</p>' +
+      '<div class="card tablewrap"><table class="terms"><thead><tr><th>Job requirement</th><th>Equivalent, full credit</th><th>Related, half credit</th><th>Misleading, no credit</th></tr></thead><tbody>' + rows + "</tbody></table></div></div>";
+  }
+
+  // ---------- Wiring ----------
+  function render(keepFocus) {
+    const active = keepFocus && document.activeElement ? document.activeElement.id : null, pos = active && document.activeElement.selectionStart;
+    document.querySelectorAll("nav.tabs button").forEach((b) => b.setAttribute("aria-selected", String(b.dataset.view === state.view)));
+    $("#job").value = state.jobId;
+    $("#roles").innerHTML = jobs.map((j) => '<button class="rolebtn" data-job="' + esc(j.job_id) + '" aria-current="' + (j.job_id === state.jobId) + '"><b>' + esc(j.title) + "</b><span>" + esc(j.department) + '</span><i title="On the shortlist">' + counts[j.job_id] + "</i></button>").join("");
+    $("#view").innerHTML = state.view === "matches" ? matchesHtml() : state.view === "pool" ? poolHtml() : howHtml();
+    if (state.view === "matches") $("#conn").value = state.conn;
+    if (active && $("#" + active)) { const el = $("#" + active); el.focus(); if (pos != null && el.setSelectionRange) try { el.setSelectionRange(pos, pos); } catch (e) {} }
+  }
+  function csvNow() { return T.exportMatches(result.shortlist, result.job); }
+  function readFile(input) { return new Promise((res) => { const f = input.files && input.files[0]; if (!f) return res(null); const r = new FileReader(); r.onload = () => res({ text: String(r.result), name: f.name }); r.onerror = () => res(null); r.readAsText(f); }); }
+
+  document.addEventListener("click", async (ev) => {
+    const t = ev.target.closest("button"); if (!t) return;
+    if (t.dataset.view) { state.view = t.dataset.view; render(); window.scrollTo(0, 0); }
+    else if (t.dataset.job) { state.jobId = t.dataset.job; state.selected = null; state.csv = ""; state.view = "matches"; try { location.hash = t.dataset.job; } catch (e) {} compute(); render(); }
+    else if (t.classList.contains("row")) { state.selected = t.dataset.id; render(); if (window.matchMedia("(max-width:1120px)").matches) document.querySelector(".detail").scrollIntoView({ behavior: "smooth" }); }
+    else if (t.id === "reset") { state.weights = Object.assign({}, D.config.weights); compute(); render(); }
+    else if (t.id === "export") {
+      const csv = csvNow();
+      try { const a = document.createElement("a"); a.href = URL.createObjectURL(new Blob([csv], { type: "text/csv" })); a.download = result.job.job_id + "_shortlist.csv"; document.body.appendChild(a); a.click(); a.remove(); } catch (e) {}
+      state.csv = csv; render(); toast("CSV prepared: " + result.shortlist.length + " rows. If no download started, copy it from the box below.");
+    }
+    else if (t.id === "copy") { const csv = csvNow(); state.csv = csv; render(); try { await navigator.clipboard.writeText(csv); toast("Shortlist CSV copied to the clipboard."); } catch (e) { toast("Copy was blocked by the browser. Select the text in the box instead."); } }
+    else if (t.id === "do-import") {
+      const att = await readFile($("#f-att")), prof = await readFile($("#f-prof"));
+      if (!att) return toast("Choose an attendees CSV first.");
+      const rows = T.parseCsv(att.text), need = ["full_name", "conference_name"];
+      rows.forEach((r, i) => { r._row_number = i + 2; r._source_file = att.name; });
+      if (!rows.length || need.some((k) => !(k in rows[0]))) return toast("That file does not look like an attendee export: it needs full_name and conference_name columns.");
+      const before = pool.summary, beforeCount = pool.contacts.length;
+      state.attendees = state.attendees.concat(rows); if (prof) state.profiles = state.profiles.concat(T.parseCsv(prof.text));
+      compute(); const s = pool.summary;
+      state.imported = { rows: rows.length, created: pool.contacts.length - beforeCount, updated: s.updated - before.updated, encounters: s.encounters_added - before.encounters_added, held: s.corrections + s.identity_review - before.corrections - before.identity_review };
+      render(); toast("Import finished.");
+    }
+    else if (t.id === "undo-import") { state.attendees = T.parseCsv(D.attendees); state.profiles = T.parseCsv(D.profiles); state.imported = null; compute(); render(); }
+  });
+  document.addEventListener("input", (ev) => {
+    const t = ev.target;
+    if (t.id === "q") { state.search = t.value; render(true); }
+    else if (t.dataset.w) { state.weights[t.dataset.w] = Number(t.value); compute(); render(true); }
+    else if (t.id === "pq") { state.pf.q = t.value; render(true); }
+  });
+  document.addEventListener("change", (ev) => {
+    const t = ev.target;
+    if (t.id === "job") { state.jobId = t.value; state.selected = null; state.csv = ""; try { location.hash = t.value; } catch (e) {} compute(); render(); }
+    else if (t.id === "conn") { state.conn = t.value; render(); }
+    else if (t.id === "p-conf") { state.pf.conference = t.value; render(); }
+    else if (t.id === "p-dom") { state.pf.domain = t.value; render(); }
+    else if (t.id === "p-rel") { state.pf.relevance = t.value; render(); }
+  });
+  function fromHash() { const h = (location.hash || "").replace("#", ""); if (jobs.some((j) => j.job_id === h) && h !== state.jobId) { state.jobId = h; state.selected = null; compute(); render(); } }
+  window.addEventListener("hashchange", fromHash);
+
+  $("#job").innerHTML = jobs.map((j) => '<option value="' + esc(j.job_id) + '">' + esc(j.job_id + " · " + j.title) + "</option>").join("");
+  const h = (location.hash || "").replace("#", ""); if (jobs.some((j) => j.job_id === h)) state.jobId = h;
+  compute(); render();
+})();
+</script>
+</body>
+</html>

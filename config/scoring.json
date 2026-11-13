@@ -1,0 +1,333 @@
+{
+  "_readme": "Every number in this file is a documented starting assumption, not a calibrated value. Change it here; no code change is needed.",
+  "weights": {
+    "required": 60,
+    "domains": 25,
+    "role_family": 5,
+    "seniority": 5,
+    "nice_to_have": 5
+  },
+  "credit": {
+    "full": 1,
+    "partial": 0.5,
+    "none": 0
+  },
+  "shortlist_rule": {
+    "min_required_coverage": 0.5,
+    "min_domain_credit": 0.5
+  },
+  "band_width": 3,
+  "seniority": {
+    "senior_title_terms": [
+      "senior",
+      "lead",
+      "principal",
+      "head",
+      "architect"
+    ],
+    "Senior": {
+      "full_years_without_title": null,
+      "partial_years": 7
+    },
+    "Mid-Senior": {
+      "full_years": 4,
+      "partial_years": 3
+    },
+    "Mid": {
+      "full_years": 3
+    }
+  },
+  "role_family": {
+    "JOB001": {
+      "full": [
+        "ml engineer",
+        "ml research",
+        "machine learning",
+        "computer vision",
+        "video ai"
+      ],
+      "partial": [
+        "data scientist",
+        "ml solutions"
+      ]
+    },
+    "JOB002": {
+      "full": [
+        "backend"
+      ],
+      "partial": [
+        "software engineer",
+        "software developer",
+        "platform engineer"
+      ]
+    },
+    "JOB003": {
+      "full": [
+        "product manager"
+      ],
+      "partial": [
+        "product lead",
+        "product analyst"
+      ]
+    },
+    "JOB004": {
+      "full": [
+        "data engineer",
+        "data platform"
+      ],
+      "partial": [
+        "analytics engineer",
+        "head of data"
+      ]
+    }
+  },
+  "professional_domains": {
+    "ML / AI": {
+      "title": [
+        "ml ",
+        "ml-",
+        "machine learning",
+        "computer vision",
+        "data scientist",
+        "video ai"
+      ],
+      "skills": [
+        "PyTorch",
+        "TensorFlow",
+        "Computer Vision",
+        "Deep Learning",
+        "Machine Learning",
+        "YOLO",
+        "OpenCV",
+        "Scikit-learn",
+        "SageMaker"
+      ]
+    },
+    "Data Engineering": {
+      "title": [
+        "data engineer",
+        "data platform",
+        "analytics engineer",
+        "head of data"
+      ],
+      "skills": [
+        "Spark",
+        "dbt",
+        "Airflow",
+        "Delta Lake",
+        "Snowflake"
+      ]
+    },
+    "Data Analytics": {
+      "title": [
+        "data analyst",
+        "analyst"
+      ],
+      "skills": [
+        "Tableau",
+        "Excel",
+        "Statistics"
+      ]
+    },
+    "Backend / Software": {
+      "title": [
+        "backend",
+        "software engineer",
+        "software developer"
+      ],
+      "skills": [
+        "Microservices",
+        "REST APIs",
+        "Spring Boot",
+        "Django",
+        "Node.js",
+        "Go"
+      ]
+    },
+    "DevOps / Platform": {
+      "title": [
+        "devops",
+        "site reliability",
+        "sre",
+        "platform engineer",
+        "platform architect",
+        "infrastructure",
+        "cloud engineer"
+      ],
+      "skills": [
+        "Kubernetes",
+        "Terraform",
+        "CI/CD",
+        "Helm",
+        "Jenkins",
+        "IaC"
+      ]
+    },
+    "Video / Broadcast Engineering": {
+      "title": [
+        "video",
+        "broadcast",
+        "media delivery",
+        "camera",
+        "streaming"
+      ],
+      "skills": [
+        "FFmpeg",
+        "HLS",
+        "DASH",
+        "Video Encoding",
+        "Video Processing",
+        "Broadcast Systems",
+        "EVS",
+        "Camera Systems"
+      ]
+    },
+    "Product": {
+      "title": [
+        "product manager"
+      ],
+      "skills": [
+        "Product Management",
+        "Roadmapping"
+      ]
+    },
+    "Solutions Architecture": {
+      "title": [
+        "solutions architect"
+      ],
+      "skills": [
+        "Architecture",
+        "ML Architecture"
+      ]
+    },
+    "IT / Networking": {
+      "title": [
+        "it manager",
+        "it engineer",
+        "network engineer"
+      ],
+      "skills": [
+        "Cisco",
+        "ITIL",
+        "IT Support",
+        "Network Design",
+        "Network Architecture",
+        "MPLS"
+      ]
+    },
+    "Marketing": {
+      "title": [
+        "marketing"
+      ],
+      "skills": [
+        "SEO",
+        "Google Ads",
+        "Content Marketing"
+      ]
+    },
+    "Technology Leadership": {
+      "title": [
+        "head of technology",
+        "cto"
+      ],
+      "skills": [
+        "Team Leadership"
+      ]
+    },
+    "Sales": {
+      "title": [
+        "account executive",
+        "sales"
+      ],
+      "skills": []
+    }
+  },
+  "conference_relevance": {
+    "Sports Technology & Analytics": {
+      "industry_terms": [
+        "sport",
+        "football"
+      ],
+      "in_requires_industry": true,
+      "in_domains": [],
+      "adjacent_domains": [
+        "ML / AI",
+        "Data Engineering",
+        "Data Analytics",
+        "Video / Broadcast Engineering"
+      ]
+    },
+    "Data Engineering & AI/ML": {
+      "industry_terms": [],
+      "in_requires_industry": false,
+      "in_domains": [
+        "ML / AI",
+        "Data Engineering"
+      ],
+      "adjacent_domains": [
+        "Data Analytics",
+        "Backend / Software",
+        "Solutions Architecture",
+        "Technology Leadership"
+      ]
+    },
+    "DevOps & Platform Engineering": {
+      "industry_terms": [],
+      "in_requires_industry": false,
+      "in_domains": [
+        "DevOps / Platform"
+      ],
+      "adjacent_domains": [
+        "Backend / Software",
+        "Solutions Architecture"
+      ]
+    },
+    "Broadcast & Video Technology": {
+      "industry_terms": [
+        "broadcast",
+        "streaming",
+        "ott",
+        "media",
+        "cdn"
+      ],
+      "in_requires_industry": false,
+      "in_domains": [
+        "Video / Broadcast Engineering"
+      ],
+      "adjacent_domains": [
+        "ML / AI",
+        "Solutions Architecture",
+        "Product"
+      ],
+      "industry_makes_adjacent": true
+    }
+  },
+  "connections": {
+    "company_stopwords": [
+      "sports",
+      "digital",
+      "technologies",
+      "tech",
+      "media",
+      "the",
+      "lab",
+      "online",
+      "group",
+      "inc",
+      "co"
+    ],
+    "generic_employers": [
+      "startup",
+      "freelance",
+      "university",
+      "public sector",
+      "agency",
+      "retailer",
+      "retail",
+      "law firm",
+      "fintech",
+      "private clinic",
+      "hospital group"
+    ]
+  }
+}

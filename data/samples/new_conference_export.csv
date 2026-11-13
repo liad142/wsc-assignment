@@ -1,0 +1,6 @@
+hubspot_id,full_name,email,company,title,conference_name,conference_domain,conference_date,source,notes,linkedin_url
+HS002,Priya Anand,priya.anand@vidstream.com,VidStream,Senior Computer Vision Engineer,DevOps World 2025,DevOps & Platform Engineering,2025-04-10,Conference - Badge Scan,"Second meeting, asked about open ML roles",linkedin.com/in/priya-anand-cv
+HS101,Dana Example,dana.example@example.com,Example Robotics,Computer Vision Engineer,DevOps World 2025,DevOps & Platform Engineering,2025-04-10,Conference - QR form,"Works on object tracking for warehouse cameras",
+HS102,Noam Sample,noam.sample@example.com,Example Cloud,Account Executive,DevOps World 2025,DevOps & Platform Engineering,2025-04-10,Conference - Badge Scan,"Vendor sales rep at the booth next to ours",
+HS103,,,Unknown Co,Engineer,DevOps World 2025,DevOps & Platform Engineering,2025-04-10,Conference - Badge Scan,"Badge did not scan properly",
+HS104,Someone Else,l.evans@img.com,Other Co,Engineer,DevOps World 2025,DevOps & Platform Engineering,2025-04-11,Conference - Badge Scan,,linkedin.com/in/mei-zhang-platform

@@ -1,0 +1,79 @@
+{
+  "_readme": "Per requirement: full = equivalent term (credit 1), partial = related term (credit 0.5), exclude = sounds similar but does not count. 'skills' are matched exactly against top_skills (case-insensitive). 'text' terms are matched as substrings in the fields named.",
+  "JOB001": {
+    "required": {
+      "Python": {"full": ["Python"], "partial": ["Python basics"], "exclude": []},
+      "PyTorch": {"full": ["PyTorch"], "partial": ["TensorFlow", "Deep Learning"], "exclude": []},
+      "Computer Vision": {"full": ["Computer Vision", "Sports CV"], "partial": ["OpenCV", "YOLO", "Pose Estimation", "Video Understanding", "Highlight Detection", "Video Analytics", "Video Captioning"], "exclude": ["Video Encoding", "FFmpeg"], "text_full": {"title": ["computer vision"]}},
+      "Object Detection": {"full": ["YOLO"], "partial": ["Sports Tracking", "Pose Estimation"], "exclude": ["Event Detection"], "text_partial": {"notes": ["tracking"]}},
+      "AWS": {"full": ["AWS"], "partial": ["SageMaker", "GCP", "Azure"], "exclude": []}
+    },
+    "domains": {
+      "Sports Video Analysis": {"full": ["Sports Highlights", "Sports Video", "Highlight Detection", "Highlight Clipping", "Sports Tracking", "Sports CV"], "partial": ["Video Analytics", "Video Understanding", "Sports Analytics", "Football Analytics", "Sports"], "exclude": ["Video Encoding"], "text_full": {"notes": ["highlight", "sports clipping"]}},
+      "Computer Vision": {"full": ["Computer Vision", "Sports CV"], "partial": ["OpenCV", "YOLO", "Pose Estimation", "Video Understanding", "Highlight Detection", "Video Analytics", "Video Captioning"], "exclude": [], "text_full": {"title": ["computer vision"]}},
+      "Deep Learning": {"full": ["Deep Learning", "PyTorch", "TensorFlow"], "partial": ["Machine Learning", "Causal ML", "Recommendation Systems"], "exclude": []}
+    },
+    "nice_to_have": {
+      "Sports Analytics": {"full": ["Sports Analytics", "Football Analytics", "Performance Analytics"], "partial": ["Sports Data", "Sports Science", "Sports"], "exclude": []},
+      "Real-time processing": {"full": ["Real-time Processing", "Real-time", "Real-time Sports Data"], "partial": ["Kafka", "Live Streaming", "WebSockets"], "exclude": [], "text_full": {"notes": ["real-time"]}},
+      "Docker": {"full": ["Docker"], "partial": ["Kubernetes", "Helm"], "exclude": []}
+    }
+  },
+  "JOB002": {
+    "required": {
+      "Python": {"full": ["Python"], "partial": ["Python basics"], "exclude": []},
+      "Go": {"full": ["Go"], "partial": [], "exclude": []},
+      "Kafka": {"full": ["Kafka"], "partial": ["Real-time Sports Data"], "exclude": []},
+      "AWS": {"full": ["AWS"], "partial": ["SageMaker", "GCP", "Azure"], "exclude": []},
+      "Microservices": {"full": ["Microservices"], "partial": ["Spring Boot", "Docker", "Kubernetes"], "exclude": []},
+      "REST APIs": {"full": ["REST APIs"], "partial": ["APIs", "Broadcast APIs", "Django", "Node.js", "Spring Boot", "Spring"], "exclude": []}
+    },
+    "domains": {
+      "Video Processing": {"full": ["Video Processing", "FFmpeg", "Video Encoding"], "partial": ["HLS", "DASH", "Video Streaming", "Live Streaming", "Multi-camera"], "exclude": []},
+      "Distributed Systems": {"full": ["Kafka", "Microservices"], "partial": ["Spark", "Kubernetes", "CDN"], "exclude": []},
+      "APIs": {"full": ["REST APIs", "APIs", "Broadcast APIs"], "partial": ["Microservices", "Sports Data Feeds", "WebSockets"], "exclude": []}
+    },
+    "nice_to_have": {
+      "FFmpeg": {"full": ["FFmpeg"], "partial": ["Video Encoding", "Video Processing"], "exclude": []},
+      "Video streaming": {"full": ["Video Streaming", "Live Streaming", "Streaming", "HLS", "DASH", "Live Sports Streaming"], "partial": ["CDN", "OTT"], "exclude": []},
+      "Redis": {"full": ["Redis"], "partial": [], "exclude": []}
+    }
+  },
+  "JOB003": {
+    "required": {
+      "Product Management": {"full": ["Product Management"], "partial": ["Roadmapping", "Agile"], "exclude": [], "text_full": {"title": ["product manager"]}},
+      "Sports Analytics": {"full": ["Sports Analytics", "Football Analytics"], "partial": ["Analytics", "Sports Digital", "Sports Broadcasting", "Sports Rights", "Sports"], "exclude": ["Insurance Analytics", "Healthcare Analytics", "Pharma Analytics"]},
+      "API Products": {"full": ["APIs", "Broadcast APIs"], "partial": ["Data Products", "CMS"], "exclude": ["REST APIs"]},
+      "Stakeholder Management": {"full": ["Stakeholder Management"], "partial": ["Team Management", "Team Leadership"], "exclude": []}
+    },
+    "domains": {
+      "Sports Technology": {"full": [], "partial": ["Sports", "Sports Digital", "Sports Rights", "Sports Broadcasting", "OTT"], "exclude": [], "text_full": {"industry": ["sports"]}},
+      "B2B SaaS": {"full": ["B2B SaaS"], "partial": ["Broadcast APIs", "CMS"], "exclude": ["B2C", "B2C Streaming"]},
+      "Data Products": {"full": ["Data Products"], "partial": ["Analytics", "APIs", "Sports Analytics"], "exclude": []}
+    },
+    "nice_to_have": {
+      "OTT platforms": {"full": ["OTT"], "partial": ["Streaming", "B2C Streaming"], "exclude": []},
+      "Broadcast tech": {"full": ["Sports Broadcasting", "Broadcast APIs", "Broadcast Systems"], "partial": ["Sports Rights", "CMS"], "exclude": [], "text_full": {"industry": ["broadcast"]}},
+      "SQL": {"full": ["SQL"], "partial": [], "exclude": []}
+    }
+  },
+  "JOB004": {
+    "required": {
+      "Python": {"full": ["Python"], "partial": ["Python basics"], "exclude": []},
+      "Spark": {"full": ["Spark"], "partial": ["Delta Lake"], "exclude": []},
+      "dbt": {"full": ["dbt"], "partial": [], "exclude": []},
+      "SQL": {"full": ["SQL"], "partial": ["PostgreSQL", "Snowflake", "dbt"], "exclude": []},
+      "AWS": {"full": ["AWS"], "partial": ["SageMaker", "GCP", "Azure"], "exclude": []},
+      "Airflow": {"full": ["Airflow"], "partial": [], "exclude": []}
+    },
+    "domains": {
+      "Sports Data Pipeline": {"full": ["Sports Data", "Real-time Sports Data", "Sports Data Feeds"], "partial": ["Sports Analytics", "Sports Broadcasting", "Sports"], "exclude": []},
+      "Cloud Infrastructure": {"full": ["AWS", "GCP", "Azure"], "partial": ["Terraform", "Kubernetes", "IaC", "Snowflake"], "exclude": []}
+    },
+    "nice_to_have": {
+      "Sports domain knowledge": {"full": [], "partial": ["Sports", "Sports Analytics", "Sports Data"], "exclude": [], "text_full": {"industry": ["sports"]}},
+      "Kafka": {"full": ["Kafka"], "partial": ["Real-time Sports Data"], "exclude": []},
+      "Terraform": {"full": ["Terraform"], "partial": ["IaC"], "exclude": []}
+    }
+  }
+}
