@@ -2,6 +2,10 @@
 
 Take-home submission for the AI Solution Manager recruitment task.
 
+https://github.com/user-attachments/assets/5d598655-40fe-4ba2-af65-d0bfa2f114a1
+
+The story in 88 seconds, sound on. The file is also in the repository: [`docs/media/talentops-film.mp4`](docs/media/talentops-film.mp4). Music and sound credits: [`docs/media/CREDITS.md`](docs/media/CREDITS.md).
+
 A pipeline that turns conference attendees into a lasting talent pool, works out what each person actually does, and, when a role opens, shows the recruiter who to contact, why, what still needs checking, and which WSC employee might know them.
 
 ## What is in this submission
@@ -107,7 +111,7 @@ data/                   the four provided CSV files, unchanged; samples/ holds o
 output/                 the shortlist for each of the four jobs; JOB001 is the required one
 tests/                  engine tests and an optional browser test
 tools/                  sensitivity.js (do the weights matter?), benchmark.js (how fast at scale?)
-docs/                   DESIGN.md, FLOW_AND_SCHEMA.md, ASSUMPTIONS.md, flow.html and img/ (the flow diagrams)
+docs/                   DESIGN.md, FLOW_AND_SCHEMA.md, ASSUMPTIONS.md, flow.html, img/ (the flow diagrams) and media/ (the video)
 ```
 
 To extend it: a new job needs a block in `taxonomy.json` and a line in `role_family`; a new conference needs a line in `conference_relevance`; a new scoring rule is a function in `src/match.js` with a test beside it.
